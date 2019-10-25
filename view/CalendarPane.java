@@ -50,34 +50,47 @@ public class CalendarPane extends JFrame {
 		////////////////////////////////
 		String[] week = {"   Sunday", "   Monday", "   Tuesday", "   Wednesday", "   Thursday", "   Friday","   Saturday"};
 		GregorianCalendar calendar = new GregorianCalendar();
-		int daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-//		System.out.println(calendar.get(Calendar.DAY_OF_WEEK));
+		int totalDaysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 		int todayDate = calendar.get(Calendar.DAY_OF_MONTH);
-//		System.out.println(calendar.get(Calendar.WEEK_OF_MONTH));
 		
 		calendar.set(Calendar.DAY_OF_MONTH, 1);
 		int firstDay = calendar.get(Calendar.DAY_OF_WEEK);
-		System.out.println(firstDay);
 		
 		calendar.set(Calendar.DAY_OF_MONTH, todayDate);
 		////////////////////////////////
-		
+		int x=0;
 		
 		for (int i = 0; i<7; ++i) {
 			JLabel weekDay = new JLabel(week[i]);
 			weekDay.setPreferredSize(new Dimension(120, 100));
 			contentPane.add(weekDay);
-//			System.out.println(i);
+			x++;
+		}
+		System.out.println(x);
+		x=0;
+		for (int i = 0; i< firstDay - 1; ++i) {
+			JLabel blankDay = new JLabel();
+			blankDay.setPreferredSize(new Dimension(120, 100));
+			contentPane.add(blankDay);
+			x++;
 		}
 		
-		for (int i = 0; i<41; ++i) {
-
-			contentPane.add(DatePanel.getDatePanel(Integer.toString(i), "fsgfv", null , null));
+		System.out.println(x);
+		x=0;
+		for (int i = 1; i<=totalDaysInMonth; ++i) {
+			contentPane.add(DatePanel.getDatePanel(Integer.toString(i), "task to do", null , null));
+			x++;
 		}
 		
-		
-		
-		
+		System.out.println(x);
+		x=0;
+		for (int i = firstDay + totalDaysInMonth - 1; i<42; ++i) {
+			JLabel blankDay = new JLabel();
+			blankDay.setPreferredSize(new Dimension(120, 100));
+			contentPane.add(blankDay);
+			x++;
+		}		
+		System.out.println(x);
 		
 	}
 
