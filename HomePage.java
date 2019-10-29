@@ -30,7 +30,8 @@ public class HomePage extends JFrame {
 
 	 static JPanel contentPane;
 	 static GregorianCalendar calendar;
-	 static JPanel calendarPanel = null;	
+	 static JPanel calendarPanel = null;
+	 static JPanel weekPanel = null;
 	 JLabel lblMonthLabel;
 	 JLabel lblYearLabel;
 
@@ -73,12 +74,30 @@ public class HomePage extends JFrame {
 
 		JMenuItem mntmMonthView = new JMenuItem("Month View");
 		mnView.add(mntmMonthView);
+		mntmMonthView.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				contentPane.remove(calendarPanel);
+				showMonthView(calendar);
+			}
+		});
 
 		JMenuItem mntmWeekView = new JMenuItem("Week View");
 		mnView.add(mntmWeekView);
-
+		mntmWeekView.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				contentPane.remove(calendarPanel);                                 //////////////
+				showWeekView(calendar);
+			}
+		});
+		
 		JMenuItem mntmDayView = new JMenuItem("Day View");
 		mnView.add(mntmDayView);
+		mntmDayView.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				contentPane.remove(calendarPanel);                                 //////////////
+				showDayView(calendar);
+			}
+		});
 
 		JMenuItem mntmAddEvent = new JMenu("Add Event");
 		menuBar.add(mntmAddEvent);
@@ -140,4 +159,21 @@ public class HomePage extends JFrame {
 		
 	}
 	
+	public void showWeekView(GregorianCalendar calendar) {
+		WeekView week = new WeekView(calendar);
+		calendarPanel = week.getWeekView();
+		calendarPanel.setBounds(0, 47, 870, 730);
+		contentPane.add(calendarPanel);
+		System.out.println("week added");
+		SwingUtilities.updateComponentTreeUI(this);
+	}
+	
+	public void showDayView(GregorianCalendar calendar) {
+		DayView day = new DayView(calendar);
+		calendarPanel = day.getDayView();
+		calendarPanel.setBounds(0, 47, 870, 730);
+		contentPane.add(calendarPanel);
+		System.out.println("day added");
+		SwingUtilities.updateComponentTreeUI(this);
+	}
 }
