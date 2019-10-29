@@ -21,26 +21,26 @@ public class DatePanel extends JPanel {
 		this.setPreferredSize(new Dimension(120, 100));
 		setLayout(null);
 		
-		JToggleButton tglbtnDateButton = new JToggleButton(date);
-		tglbtnDateButton.setBounds(0, 1, 115, 50);
-		add(tglbtnDateButton);
+		JButton btnDateButton = new JButton(date);
+		btnDateButton.setBounds(0, 1, 115, 50);
+		add(btnDateButton);
 		
 		if(event1 != null) {
-		JToggleButton tglbtnEvent3 = new JToggleButton(event1);
-		tglbtnEvent3.setBounds(0, 50, 115, 14);
-		add(tglbtnEvent3);
+		JButton btnEvent3 = new JButton(event1);
+		btnEvent3.setBounds(0, 50, 115, 14);
+		add(btnEvent3);
 		}
 		
 		if(event2 != null) {
-		JToggleButton tglbtnEvent2 = new JToggleButton(event2);
-		tglbtnEvent2.setBounds(0, 64, 115, 14);
-		add(tglbtnEvent2);
+		JButton btnEvent2 = new JButton(event2);
+		btnEvent2.setBounds(0, 64, 115, 14);
+		add(btnEvent2);
 		}
 		
 		if(event3 != null) {
-		JToggleButton tglbtnEvent1 = new JToggleButton(event3);
-		tglbtnEvent1.setBounds(0, 78, 115, 14);
-		add(tglbtnEvent1);
+		JButton btnEvent1 = new JButton(event3);
+		btnEvent1.setBounds(0, 78, 115, 14);
+		add(btnEvent1);
 		}
 	}
 	
