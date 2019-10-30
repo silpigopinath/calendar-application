@@ -62,7 +62,7 @@ public class DayView extends JFrame {
 		
 		calendar.set(Calendar.DAY_OF_MONTH, todayDate);
 		////////////////////////////////
-		JLabel monthLabel = new JLabel(Integer.toString(calendar.get(Calendar.MONTH)));
+		JLabel monthLabel = new JLabel();
 		contentPane.add(monthLabel);
 		
 //		JButton task1Button = new JButton("Task1");                                   ////////////NO OF TASKS
@@ -70,13 +70,13 @@ public class DayView extends JFrame {
 		JLabel blankLabel1 = new JLabel("");
 		contentPane.add(blankLabel1);
 		
-		JLabel dateLabel = new JLabel(Integer.toString(calendar.get(Calendar.DATE)));
+		JLabel dateLabel = new JLabel(week[calendar.get(Calendar.DAY_OF_WEEK)]);
 		contentPane.add(dateLabel);
 		
 		JButton task2Button = new JButton("View Tasks");
 		contentPane.add(task2Button);
 		
-		JLabel dayLabel = new JLabel(week[calendar.get(Calendar.DAY_OF_WEEK)]);
+		JLabel dayLabel = new JLabel();
 		contentPane.add(dayLabel);
 //		
 //		JButton viewTaskButton = new JButton("More Tasks");
@@ -90,7 +90,7 @@ public class DayView extends JFrame {
 				JLabel timeLabel = new JLabel(timeInterval[i/2]);
 				contentPane.add(timeLabel);
 			}
-			else if(false){                                                              /////////////////// IF TASK
+			else if(i >33){                                                              /////////////////// IF TASK
 				JButton taskButton = new JButton("Task");
 				contentPane.add(taskButton);
 			}
@@ -101,4 +101,7 @@ public class DayView extends JFrame {
 		}			
 	}
 
+	public JPanel getDayView() {
+		return contentPane;
+	}
 }
