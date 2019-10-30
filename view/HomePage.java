@@ -3,6 +3,7 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.Frame;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import javax.swing.JFrame;
@@ -17,20 +18,22 @@ import com.toedter.calendar.JMonthChooser;
 import com.toedter.calendar.JYearChooser;
 
 import javax.swing.JToggleButton;
+import javax.swing.SwingUtilities;
 import javax.swing.JButton;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 public class HomePage extends JFrame {
 
-	private static JPanel contentPane;
-	static GregorianCalendar calendar = new GregorianCalendar();
-	
-	static JYearChooser yearChooser = null;
-	static JMonthChooser monthChooser = null;
-	static JLabel lblMonthLabel = new JLabel();
-	static JPanel calendarPanel = null;	
+	 static JPanel contentPane;
+	 static GregorianCalendar calendar;
+	 static JPanel calendarPanel = null;
+	 static JPanel weekPanel = null;
+	 JLabel lblMonthLabel;
+	 JLabel lblYearLabel;
 
 	/**
 	 * Launch the application.
@@ -59,6 +62,8 @@ public class HomePage extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		
+		calendar = new GregorianCalendar();               ////////////INITIALIZING CALENDAR
 
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBounds(0, 0, 1184, 21);
@@ -69,72 +74,106 @@ public class HomePage extends JFrame {
 
 		JMenuItem mntmMonthView = new JMenuItem("Month View");
 		mnView.add(mntmMonthView);
+		mntmMonthView.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				contentPane.remove(calendarPanel);
+				showMonthView(calendar);
+			}
+		});
 
 		JMenuItem mntmWeekView = new JMenuItem("Week View");
 		mnView.add(mntmWeekView);
-
+		mntmWeekView.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				contentPane.remove(calendarPanel);                                 //////////////
+				showWeekView(calendar);
+			}
+		});
+		
 		JMenuItem mntmDayView = new JMenuItem("Day View");
 		mnView.add(mntmDayView);
+		mntmDayView.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				contentPane.remove(calendarPanel);                                 //////////////
+				showDayView(calendar);
+			}
+		});
 
 		JMenuItem mntmAddEvent = new JMenu("Add Event");
 		menuBar.add(mntmAddEvent);
 
-		
-
 		//////////////////////
-		showMonthView(new GregorianCalendar());
+		showMonthView(calendar);
 		/////////////////////
 	}
 
-	public static void showMonthView(GregorianCalendar calendar) {
+	public void showMonthView(GregorianCalendar calendar) {
 		
-		yearChooser = new JYearChooser();
-		yearChooser.setBounds(466, 22, 88, 20);
-		yearChooser.addPropertyChangeListener("year", new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent e) {
-				calendar.set(GregorianCalendar.DAY_OF_MONTH, 1);
-				calendar.set(GregorianCalendar.MONTH, monthChooser.getMonth());
-				calendar.set(GregorianCalendar.YEAR, (int) e.getNewValue());
-				System.out.println("Comet :" + calendar.getTime());
-				contentPane.remove(calendarPanel);
-				showMonthView(calendar);
+		String[] months = {"January", "February", "March", "April", "May", "June", "July",
+				"August", "September", "October", "November", "December"};
+		lblMonthLabel = new JLabel(months[calendar.get(Calendar.MONTH)]);
+		lblMonthLabel.setBounds(336, 22, 59, 26);
 
-			}
-		});
-
-		monthChooser = new JMonthChooser();
-		monthChooser.setBounds(228, 22, 116, 20);
-		monthChooser.addPropertyChangeListener("month", new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent e) {
-				calendar.set(GregorianCalendar.DAY_OF_MONTH, 1);
-				calendar.set(GregorianCalendar.YEAR, yearChooser.getYear());
-				calendar.set(GregorianCalendar.MONTH, (int) e.getNewValue());
+		lblYearLabel = new JLabel(Integer.toString(calendar.get(Calendar.YEAR)));
+		lblYearLabel.setBounds(405, 22, 33, 26);
+	
+		JButton btnLeftButton = new JButton("<");
+		btnLeftButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int month = calendar.get(Calendar.MONTH);
+				calendar.set(Calendar.DATE, 1);
+				calendar.set(Calendar.MONTH, month - 1);
 				contentPane.remove(calendarPanel);
+				contentPane.remove(lblMonthLabel);
+				contentPane.remove(lblYearLabel);
 				showMonthView(calendar);
 			}
 		});
-
-//		lblMonthLabel = new JLabel("");
-		lblMonthLabel.setBounds(354, 22, 100, 26);
+		btnLeftButton.setBounds(281, 22, 41, 22);
+		contentPane.add(btnLeftButton);
 		
-		contentPane.add(yearChooser);
-		contentPane.add(monthChooser);
-		contentPane.add(lblMonthLabel);
-		lblMonthLabel.removeAll();
-		lblMonthLabel.setText(Integer.toString(calendar.get(GregorianCalendar.MONTH)));
-
-
+		JButton btnRightButton = new JButton(">");
+		btnRightButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int month = calendar.get(Calendar.MONTH);
+				calendar.set(Calendar.DATE, 1);
+				calendar.set(Calendar.MONTH, month + 1);
+				contentPane.remove(calendarPanel);
+				contentPane.remove(lblMonthLabel);
+				contentPane.remove(lblYearLabel);
+				showMonthView(calendar);
+			}
+		});
+		btnRightButton.setBounds(445, 22, 41, 22);
+		contentPane.add(btnRightButton);
+		
+		///////////////////////////
 		MonthView month = new MonthView(calendar);
-		
+		contentPane.add(lblMonthLabel);
+		contentPane.add(lblYearLabel);
 		calendarPanel = month.getMonthView();
 		calendarPanel.setBounds(0, 47, 870, 730);
-		
-		
 		contentPane.add(calendarPanel);
-		System.out.println("done");
+		SwingUtilities.updateComponentTreeUI(this);
+		////////////////////////////
 		
-		
+	}
+	
+	public void showWeekView(GregorianCalendar calendar) {
+		WeekView week = new WeekView(calendar);
+		calendarPanel = week.getWeekView();
+		calendarPanel.setBounds(0, 47, 870, 730);
+		contentPane.add(calendarPanel);
+		System.out.println("week added");
+		SwingUtilities.updateComponentTreeUI(this);
+	}
+	
+	public void showDayView(GregorianCalendar calendar) {
+		DayView day = new DayView(calendar);
+		calendarPanel = day.getDayView();
+		calendarPanel.setBounds(0, 47, 870, 730);
+		contentPane.add(calendarPanel);
+		System.out.println("day added");
+		SwingUtilities.updateComponentTreeUI(this);
 	}
 }
