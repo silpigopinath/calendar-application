@@ -11,6 +11,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.awt.GridBagLayout;
@@ -18,6 +20,7 @@ import java.awt.GridBagLayout;
 public class WeekView extends JFrame {
 
 	private JPanel contentPane;
+	
 
 	/**
 	 * Launch the application.
@@ -39,6 +42,7 @@ public class WeekView extends JFrame {
 	 * Create the frame.
 	 */
 	public WeekView(GregorianCalendar calendar) {
+		System.out.println("WeekView Constr beg:" + calendar.getTime());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 870, 730);
 		contentPane = new JPanel();
@@ -46,7 +50,10 @@ public class WeekView extends JFrame {
 		setContentPane(contentPane);
 		GridLayout grid = new GridLayout(27, 8, 0, 0);
 		contentPane.setLayout(grid);
-
+		
+		JButton[][] taskButtonGrid = new JButton[24][7];
+		
+		
 		////////////////////////////////
 		String[] week = { "   Sunday", "   Monday", "   Tuesday", "   Wednesday", "   Thursday", "   Friday",
 				"   Saturday" };
@@ -54,8 +61,6 @@ public class WeekView extends JFrame {
 								"06 AM : 07 AM", "07 AM : 08 AM", "08 AM : 09 AM", "09 AM : 10 AM", "10 AM : 11 AM", "11 AM : 12 PM",
 								"12 PM : 01 PM", "01 PM : 02 PM", "02 PM : 03 PM", "03 PM : 04 PM", "04 PM : 05 PM", "05 PM : 06 PM",
 								"06 PM : 07 PM", "07 PM : 08 PM", "08 PM : 09 PM", "09 PM : 10 PM", "10 PM : 11 PM", "11 PM : 12 AM",};
-		
-//		calendar.set(Calendar.DAY_OF_MONTH, 3);
 
 		int totalDaysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 		int todayDate = calendar.get(Calendar.DAY_OF_MONTH);
@@ -65,16 +70,14 @@ public class WeekView extends JFrame {
 		if(sundayIndex > 0) {
 			sundayDate = sundayIndex;
 		}
-
 		int month = calendar.get(Calendar.MONTH);
-		calendar.set(Calendar.MONTH, month - 1);
-		int lastDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+		int year = calendar.get(Calendar.YEAR);
+		int lastDay = numberOfDaysInMonth(month, year);
 		if(sundayIndex <= 0) {
 			
 			sundayDate = lastDay + sundayIndex;
 		}
 		////////////////////////////////
-
 		JLabel blankDay1 = new JLabel("");
 		contentPane.add(blankDay1);
 
@@ -102,21 +105,45 @@ public class WeekView extends JFrame {
 			}
 		}
 
-		for (int i = 0; i < 192; ++i) {
-			if(i % 8 == 0) {
-				JLabel hourLabel = new JLabel(timeInterval[i/8]);
-				contentPane.add(hourLabel);
+		for (int i = 0; i < 24; ++i) {
+			for(int j = 0; j < 8; j++) {
+				if(j % 8 == 0) {
+					JLabel hourLabel = new JLabel(timeInterval[i/8]);
+					contentPane.add(hourLabel);
+				}
+				else if (i>20){                                                         //////////CHECK FOR EVENT
+					taskButtonGrid[i][j - 1] = new JButton("eventx");					//////////VIEW EVENT
+					taskButtonGrid[i][j - 1].addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							for (int row = 0; row < 24; row++) {
+							    for (int col = 0; col < 7; col++) {
+							       if (taskButtonGrid[row][col] == e.getSource()) {
+							       /////VIEW EVENT DIALOG
+							    	   System.out.println(row + "" + col);
+							       }
+							    }
+							  }
+							
+						}
+					});
+					
+					contentPane.add(taskButtonGrid[i][j - 1]);
+				}
+				else {
+					JLabel blankDay4 = new JLabel("");
+					contentPane.add(blankDay4);
+				}
 			}
-			else if(i > 45) {                                                     //////////CONDITION FOR EVENT
-				JButton eventButton = new JButton(Integer.toString(i));           ///////DISPLAY EVENT
-				contentPane.add(eventButton);
-			}
-			else {
-				JLabel blankDay4 = new JLabel("");
-				contentPane.add(blankDay4);
-			}
+			
 		}
+		
+		System.out.println("WeekView Constr end:" + calendar.getTime());
 
+	}
+	
+	public static int numberOfDaysInMonth(int month, int year) {
+	    Calendar monthStart = new GregorianCalendar(year, month, 1);
+	    return monthStart.getActualMaximum(Calendar.DAY_OF_MONTH);
 	}
 	
 	public JPanel getWeekView() {
