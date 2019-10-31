@@ -113,7 +113,7 @@ public class MonthView extends JFrame {
 								for (int col = 0; col < COLS; col++) {
 									if (datePanelGrid[row][col] != null
 											&& e.getSource() == datePanelGrid[row][col].getBtnDateButton()) {
-										//////////////////// VIEW ALL EVENTS OF DAY DIALOG
+										//////////////////// (DATE) LIST<EVENT> <DIALOG>
 										System.out.println(datePanelGrid[row][col].getBtnDateButton().getText());
 										System.out.println(row + "" + col);
 
@@ -130,7 +130,7 @@ public class MonthView extends JFrame {
 									for (int col = 0; col < COLS; col++) {
 										if (datePanelGrid[row][col] != null
 												&& e.getSource() == datePanelGrid[row][col].getBtnEvent1()) {
-											//////////////////// VIEW EVENT DETAILS DIALOG
+											//////////////////// (DATE, TITLE) EVENT <DIALOG>
 											System.out.println(datePanelGrid[row][col].getBtnEvent1().getText());
 											System.out.println(row + "" + col);
 
@@ -147,7 +147,7 @@ public class MonthView extends JFrame {
 									for (int col = 0; col < COLS; col++) {
 										if (datePanelGrid[row][col] != null
 												&& e.getSource() == datePanelGrid[row][col].getBtnEvent2()) {
-											//////////////////// VIEW EVENT DETAILS DIALOG
+											//////////////////// (DATE, TITLE) EVENT <DIALOG>
 											System.out.println(datePanelGrid[row][col].getBtnEvent2().getText());
 											System.out.println(row + "" + col);
 
@@ -164,7 +164,7 @@ public class MonthView extends JFrame {
 									for (int col = 0; col < COLS; col++) {
 										if (datePanelGrid[row][col] != null
 												&& e.getSource() == datePanelGrid[row][col].getBtnEvent3()) {
-											//////////////////// VIEW EVENT DETAILS DIALOG
+											//////////////////// (DATE, TITLE) EVENT <DIALOG>
 											System.out.println(datePanelGrid[row][col].getBtnEvent3().getText());
 											System.out.println(row + "" + col);
 

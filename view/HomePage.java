@@ -76,7 +76,7 @@ public class HomePage extends JFrame {
 		mnView.add(mntmMonthView);
 		mntmMonthView.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				contentPane.removeAll();                                 //////////////
+				contentPane.removeAll();                              
 				SwingUtilities.updateComponentTreeUI(contentPane);
 				contentPane.add(menuBar);
 				showMonthView();
@@ -87,11 +87,10 @@ public class HomePage extends JFrame {
 		mnView.add(mntmWeekView);
 		mntmWeekView.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				contentPane.removeAll();                                 //////////////
+				contentPane.removeAll();                                 
 				SwingUtilities.updateComponentTreeUI(contentPane);
 				contentPane.add(menuBar);
 				showWeekView();
-//				System.out.println("week view call" + calendar.getTime());
 			}
 		});
 		
@@ -99,7 +98,7 @@ public class HomePage extends JFrame {
 		mnView.add(mntmDayView);
 		mntmDayView.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				contentPane.removeAll();                                 //////////////
+				contentPane.removeAll();                               
 				SwingUtilities.updateComponentTreeUI(contentPane);
 				contentPane.add(menuBar); 
 				showDayView(calendar);
@@ -172,7 +171,6 @@ public class HomePage extends JFrame {
 		contentPane.add(lblMonthLabel);
 		contentPane.add(lblYearLabel);
 		MonthView month = new MonthView(calendar);
-		System.out.println(calendar.getTime());                         //
 		calendarPanel = month.getMonthView();
 		calendarPanel.setBounds(0, 47, 870, 730);
 		contentPane.add(calendarPanel);
@@ -197,11 +195,8 @@ public class HomePage extends JFrame {
 		JButton btnLeftButton = new JButton("<");
 		btnLeftButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-//				System.out.println("bef<" + calendar.getTime());
 				int date = calendar.get(Calendar.DAY_OF_MONTH);
 				calendar.set(Calendar.DAY_OF_MONTH, date-7);
-//				System.out.println("aft<" + calendar.getTime());
-//				calendar.set(Calendar.MONTH, month - 1);
 				contentPane.remove(calendarPanel);
 				contentPane.remove(lblMonthLabel);
 				contentPane.remove(lblYearLabel);
@@ -214,11 +209,8 @@ public class HomePage extends JFrame {
 		JButton btnRightButton = new JButton(">");
 		btnRightButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-//				System.out.println("bef>" + calendar.getTime());
 				int date = calendar.get(Calendar.DAY_OF_YEAR);
 				calendar.set(Calendar.DAY_OF_YEAR, date+7);
-//				System.out.println("aft>" + calendar.getTime());
-//				calendar.set(Calendar.MONTH, month + 1);
 				contentPane.remove(calendarPanel);
 				contentPane.remove(lblMonthLabel);
 				contentPane.remove(lblYearLabel);
@@ -230,28 +222,21 @@ public class HomePage extends JFrame {
 		///////////////////////////
 		contentPane.add(lblMonthLabel);
 		contentPane.add(lblYearLabel);
-		
-//		System.out.println("bef constr call" + calendar.getTime());
 
 		WeekView week = new WeekView(calendar);
-		
-//		System.out.println("aft constr call" + calendar.getTime());
 		
 		calendarPanel = week.getWeekView();
 		calendarPanel.setBounds(0, 47, 870, 730);
 		contentPane.add(calendarPanel);
-//		System.out.println("week added");
 		SwingUtilities.updateComponentTreeUI(this);
 		/////////////////////////////
 	}
 	
 	public void showDayView(GregorianCalendar calendar) {
-//		paintComponents();
 		DayView day = new DayView(calendar);
 		calendarPanel = day.getDayView();
 		calendarPanel.setBounds(0, 47, 870, 730);
 		contentPane.add(calendarPanel);
-//		System.out.println("day added");
 		SwingUtilities.updateComponentTreeUI(contentPane);
 	}
 }

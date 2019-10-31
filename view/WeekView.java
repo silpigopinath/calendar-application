@@ -94,7 +94,6 @@ public class WeekView extends JFrame {
 			}
 			dateLabelGrid[i] = new JLabel("                " + (i + sundayDate));
 			contentPane.add(dateLabelGrid[i]);
-//			System.out.println(dateLabelGrid[i].getText());
 		}
 
 		JLabel blankDay2 = new JLabel("");
@@ -118,15 +117,15 @@ public class WeekView extends JFrame {
 			}
 			
 			////////////////////////////////////
-			if (eventList.size() > 0) { ////////// EVENT CONDITION
-				viewAllEventsButtonGrid[i] = new JButton("View" + eventList.size() + "Events"); ////////// NO OF EVENTS
+			if (eventList.size() > 0) { 
+				viewAllEventsButtonGrid[i] = new JButton("View" + eventList.size() + "Events");
 				viewAllEventsButtonGrid[i].addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						System.out.println("event");
 						for (int row = 0; row < 7; row++) {
 							System.out.println(row);
 							if (viewAllEventsButtonGrid[row] == e.getSource()) {
-								///// VIEW EVENT DIALOG
+								///// (DATE) LIST<EVENT> <DIALOG>
 								System.out.println(row);
 							}
 
@@ -144,7 +143,7 @@ public class WeekView extends JFrame {
 				Date currentDayDate = new Date(year, month, Integer.parseInt(dateLabelGrid[i].getText()));
 				List<Event> eventList = null;
 				try {
-					eventList = CalendarController.readDay(currentDayDate);                  //////////////REPLACE WITH READdAY(DATE, TIME)
+					eventList = CalendarController.readDay(currentDayDate);                  //////////////(DATE, TIME) LIST<EVENT>
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -163,13 +162,13 @@ public class WeekView extends JFrame {
 					else {
 						eventButtonGrid[i][j - 1] = new JButton("View" + eventList.size() + "Events");
 					}
-					 ////////// VIEW EVENT
+					 ////////// (DATE, HOUR, TITLE) EVENT DIALOG || (DATE, HOUR) LIST<EVENT> DIALOG
 					eventButtonGrid[i][j - 1].addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
 							for (int row = 0; row < 24; row++) {
 								for (int col = 0; col < 7; col++) {
 									if (eventButtonGrid[row][col] == e.getSource()) {
-										///// VIEW EVENT DIALOG
+										///// (DATE, TIME, TITLE) EVENT <DIALOG>
 										System.out.println(row + "" + col);
 									}
 								}
