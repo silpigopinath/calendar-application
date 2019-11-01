@@ -38,21 +38,18 @@ public class EventDAO {
 
 	
 
-	private static String READDAYSQL = "SELECT *FROM Event WHERE EXTRACT (DAY FROM startDate)=?";
+	private static String READDAYSQL = "SELECT *FROM Event WHERE startDate<=? and endDate>=?";
 
 	
 	
-	private static String READBYEVENTSQL="SELECT * FROM Event WHERE  title=? and  startDate=?";
-	private static String READBYTIMESQL="SELECT * FROM Event WHERE startDate=? and startTime=? and title=? ";
+	private static String READBYEVENTSQL="SELECT * FROM Event WHERE  title=? and  startDate<=? and endDate>=?";
+	private static String READBYTIMESQL="SELECT * FROM Event WHERE ((startDate<=?  and endDate>=?)and (startTime<= ? and endTime>= ?) )and title=? ";
 
-	private static String READBYDATETIMESQL="SELECT * FROM Event WHERE  startDate=? and  startTime=?";
+	private static String READBYDATETIMESQL="SELECT * FROM Event WHERE  (startDate<= ? and endDate>= ?) and (startTime<= ? and startTime>= ?)";
 
-	private static String REMOVEEVENTSQL="DELETE FROM  Event WHERE title=? and startDate=? and startTime=? ";
+	private static String REMOVEEVENTSQL="DELETE FROM  Event WHERE ((startDate<=?  and endDate>=?)and (startTime<= ? and endTime>= ?) )and title=? ";
 
-	private static PreparedStatement pStmt;
-
-	private static PreparedStatement pStmt2;   
-
+	
 	public static void create() throws Exception {
 
 		Connection con = null;
@@ -170,20 +167,14 @@ public static List<Event> readByDay(java.util.Date date) throws Exception {
 		try {
 
 			con = connector.getConnection();
-
-			Calendar cal = Calendar.getInstance();
-
-			cal.setTime(date);
-
-			int year = cal.get(Calendar.YEAR);
-
-			int month = cal.get(Calendar.MONTH);
-
-			int day = cal.get(Calendar.DAY_OF_MONTH);
+			java.sql.Date sStartDate = new java.sql.Date(date.getTime());
 
 			pStmt = con.prepareStatement(READDAYSQL);
 
-			pStmt.setInt(1, day);
+
+			pStmt.setDate(1, sStartDate);
+			pStmt.setDate(2, sStartDate);
+			
 
 			ResultSet rs = pStmt.executeQuery();
 
@@ -237,17 +228,18 @@ public static List<Event>  getEvent(String title,java.util.Date date)
 {
 	Connection con = null;
 
-	pStmt2 = null;
+	PreparedStatement pStmt = null;
 	ArrayList<Event>ls=new ArrayList<>();
 	DbConnector connector = DbConnector.getInstance();
 	try {
 		con=connector.getConnection();
-		pStmt2=con.prepareStatement(READBYEVENTSQL);
+		pStmt=con.prepareStatement(READBYEVENTSQL);
 		System.out.println(title);
-		pStmt2.setString(1,title);
+		pStmt.setString(1,title);
 		java.sql.Date sStartDate = new java.sql.Date(date.getTime());
-		pStmt2.setDate(2, sStartDate);
-		ResultSet rs = pStmt2.executeQuery();
+		pStmt.setDate(2, sStartDate);
+		pStmt.setDate(3, sStartDate);
+		ResultSet rs = pStmt.executeQuery();
 
 
 
@@ -278,12 +270,12 @@ public static List<Event>  getEvent(String title,java.util.Date date)
 	return ls;
 }
 
-public static Event getEventByTime(java.util.Date date, java.util.Date time,String title)
+public static Event getEventByTime(java.util.Date date, java.util.Date time,String title) throws SQLException
 {
 	Connection con = null;
 	Event evnt = null;
-	pStmt = null;
-	ArrayList<Event>ls=new ArrayList<>();
+	PreparedStatement pStmt = null;
+	
 	DbConnector connector = DbConnector.getInstance();
 	try {
 		con=connector.getConnection();
@@ -291,9 +283,11 @@ public static Event getEventByTime(java.util.Date date, java.util.Date time,Stri
 		java.sql.Date sStartDate = new java.sql.Date(date.getTime());
 		
 		pStmt.setDate(1, sStartDate);
+		pStmt.setDate(2, sStartDate);
 		java.sql.Time sStartTime = new java.sql.Time(time.getTime());
-		pStmt.setTime(2, sStartTime);
-		pStmt.setString(3,title);
+		pStmt.setTime(3, sStartTime);
+		pStmt.setTime(4, sStartTime);
+		pStmt.setString(5,title);
 		
 		ResultSet rs = pStmt.executeQuery();
 
@@ -323,10 +317,15 @@ public static Event getEventByTime(java.util.Date date, java.util.Date time,Stri
 	{
 		ex.printStackTrace();
 	}
+	finally
+	{
+		pStmt.close();
+		con.close();
+	}
 	return evnt;
 }
 
-public static List<Event> readByDateTime(java.util.Date date, java.util.Date time)
+public static List<Event> readByDateTime(java.util.Date date, java.util.Date time) throws SQLException
 {
 
 	Connection con = null;
@@ -339,8 +338,10 @@ public static List<Event> readByDateTime(java.util.Date date, java.util.Date tim
 		pStmt=con.prepareStatement(READBYDATETIMESQL);
 		java.sql.Date sStartDate = new java.sql.Date(date.getTime());
 		pStmt.setDate(1, sStartDate);
+		pStmt.setDate(2, sStartDate);
 		java.sql.Time sStartTime = new java.sql.Time(time.getTime());
-		pStmt.setTime(2, sStartTime);
+		pStmt.setTime(3, sStartTime);
+		pStmt.setTime(4, sStartTime);
 		ResultSet rs = pStmt.executeQuery();
 
 
@@ -369,10 +370,16 @@ public static List<Event> readByDateTime(java.util.Date date, java.util.Date tim
 	{
 		ex.printStackTrace();
 	}
+	finally
+	{
+		pStmt.close();
+		con.close();
+	}
 	return ls;
+	
 }
 
-public static  void removeEvent(Event evnt)
+public static  void removeEvent(Event evnt) throws SQLException
 {
 	Connection con = null;
 
@@ -382,17 +389,25 @@ public static  void removeEvent(Event evnt)
 	try {
 		con=connector.getConnection();
 		
-		con.prepareStatement(REMOVEEVENTSQL);
-		pStmt.setString(1, evnt.getTitle());
+		pStmt=con.prepareStatement(REMOVEEVENTSQL);
+		
 		java.sql.Date sStartDate = new java.sql.Date(evnt.getStartDate().getTime());
+		pStmt.setDate(1, sStartDate);
 		pStmt.setDate(2, sStartDate);
 		java.sql.Time sStartTime = new java.sql.Time(evnt.getStartTime().getTime());
 		pStmt.setTime(3, sStartTime);
-		ResultSet rs = pStmt.executeQuery();
+		pStmt.setTime(4, sStartTime);
+		pStmt.setString(5, evnt.getTitle());
+		pStmt.executeUpdate();
 	}
 	catch(Exception ex)
 	{
 		ex.printStackTrace();
+	}
+	finally
+	{
+		pStmt.close();
+		con.close();
 	}
 }
 
@@ -411,22 +426,23 @@ public static  void removeEvent(Event evnt)
 
 //			/cal.set(2019,9,13,10,30);
 
-//			 Time start = Time.valueOf("2:00:00");
-//
-//			 long l = start.getTime();
-//
-//			 Time end=Time.valueOf("3:00:00");
-//			 long l1 = end.getTime();
-//			 insert(new Event("blood donation","ground floor","Discussion of progress of work",new Date(2019-1900,11,15),new Date(l),new Date(2019-1900,11,15),new Date(l1)));
+			 Time start = Time.valueOf("4:00:00");
 
+			 long l = start.getTime();
+//
+			 Time end=Time.valueOf("5:00:00");
+			 long l1 = end.getTime();
+//			 insert(new Event("Seminar","Conference Hall","Seminar on the topic women em-Powerment ",new Date(2019-1900,11,11),new Date(l),new Date(2019-1900,11,15),new Date(l1)));
+			 removeEvent(new Event("Seminar","Conference Hall","Seminar on the topic women em-Powerment ",new Date(2019-1900,11,11),new Date(l),new Date(2019-1900,11,15),new Date(l1)));
 			// System.out.println(cal);
 
 			// cal.set(Calendar.DAY_OF_MONTH, 13);
+//
+			Date d=new Date(2019-1900,11,14);
 
-//			Date d=new Date(2019-1900,11,10);
-//
-//			List<Event> ls=getEvent("meetting",d);
-//
+//			List<Event> ls=
+//			Event evnt=getEventByTime(d,new Date(l),"Seminar");
+//			System.out.println("LOC"+evnt.getLocation()+"DES"+evnt.getDescription());
 //		    for(int i=0;i<ls.size();i++)
 //
 //			 {
