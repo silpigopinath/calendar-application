@@ -86,25 +86,27 @@ public class MonthView extends JFrame {
 				///////////////////////////////////////////////////////////////////////////////////////////
 				else if ((i * COLS) + (j + 1) <= (firstDay - 1) + totalDaysInMonth) {
 					
+					String event1 = null, event2 = null, event3 = null;
 					List<Event> eventsToday = null;
 					int currentDate = (i * 7) + (j + 1) - (firstDay - 1);
 					try {
-						eventsToday = CalendarController.readDay(new Date(year, month, currentDate));
+						eventsToday = CalendarController.readDay(new Date(year - 1900, month, currentDate));
+						
+						Event event = eventsToday.get(0);
+						event1 = event.getTitle();
+						event = eventsToday.get(1);
+						event2 = event.getTitle();
+						event = eventsToday.get(2);
+						event3 = event.getTitle();
+						if (eventsToday.size() > 3) {
+							event3 = "...";
+						}
 					} catch (Exception e1) {
-						e1.printStackTrace();
+//						e1.printStackTrace();
+						//KEEP QUIET
 					}
 
-					List<String> eventList = null;
-					String event1 = null, event2 = null, event3 = null;
-					Event event = eventsToday.get(0);
-					event1 = event.getTitle();
-					event = eventsToday.get(1);
-					event2 = event.getTitle();
-					event = eventsToday.get(2);
-					event3 = event.getTitle();
-					if (eventsToday.size() > 3) {
-						event3 = "View More Events";
-					}
+					
 					datePanelGrid[i][j] = new DatePanel(Integer.toString(currentDate), event1, event2, event3);
 					///////////////////////////////////////////
 					datePanelGrid[i][j].getBtnDateButton().addActionListener(new ActionListener() {

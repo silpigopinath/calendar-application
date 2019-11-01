@@ -20,6 +20,8 @@ import com.toedter.calendar.JYearChooser;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -109,7 +111,9 @@ public class HomePage extends JFrame {
 		menuBar.add(mntmAddEvent);
 		mntmAddEvent.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				addEvent();
+				AddEvent dialog = new AddEvent();
+				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+				dialog.setVisible(true);
 			}
 		});
 
@@ -117,11 +121,6 @@ public class HomePage extends JFrame {
 		showMonthView();
 		/////////////////////
 	}
-
-	public void addEvent() {
-		
-	}
-	
 	
 	public void showMonthView() {
 		

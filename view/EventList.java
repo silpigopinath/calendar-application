@@ -2,11 +2,14 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import model.Event;
 
 public class EventList extends JDialog {
 
@@ -29,7 +32,7 @@ public class EventList extends JDialog {
 	 * Create the dialog.
 	 */
 	public EventList() {
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 450, 387);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setLayout(new FlowLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -50,6 +53,16 @@ public class EventList extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
+	}
+	
+	public static EventList getEventListDialog(List<Event> eventList) {
+		EventList eventListDialog = new EventList();
+		int size = eventList.size();
+		for(int i = 0; i < size; ++i) {
+			Event event = eventList.get(i);             
+			
+		}
+		return eventListDialog;
 	}
 
 }

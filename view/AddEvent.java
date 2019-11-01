@@ -139,7 +139,7 @@ public class AddEvent extends JDialog {
 						endDate = dateChooser_1.getDate();
 						String startTimeString = (String) cmbBoxStartTime.getSelectedItem();
 						String endTimeString = (String) cmbBoxEndTime.getSelectedItem();
-						description = lblDescription.getText();
+						description = txtrEventDescription.getText();
 
 						if (eventName == null || eventName.equals("")) {
 							lblWarning.setText("Event Name Cannot be Empty");
