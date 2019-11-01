@@ -5,17 +5,46 @@ package model;
 import java.util.Date;
 
 public class Event {
-	public Event(String eventId, String location, String title, String description, Date  date, Date time) {
+	
+	String eventId,location,title,description;
+    Date startDate,startTime, endDate, endTime;
+	
+	public Event(String eventId, String location, String title, String description, Date  startDate, Date startTime, Date endDate, Date endTime) {
 		super();
 		this.eventId = eventId;
 		this.location = location;
 		this.title = title;
 		this.description = description;
-		this.date = date;
-		this.time = time;
+		this.startDate = startDate;
+		this.startTime = startTime;
+		this.endDate = endDate;
+		this.endTime = endTime;
 	}
-	String eventId,location,title,description;
-    Date date,time;
+	
+	public Date getStartDate() {
+		return startDate;
+	}
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+	public Date getStartTime() {
+		return startTime;
+	}
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
+	}
+	public Date getEndDate() {
+		return endDate;
+	}
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+	public Date getEndTime() {
+		return endTime;
+	}
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
+	}
 	public String getEventId() {
 		return eventId;
 	}
@@ -39,18 +68,6 @@ public class Event {
 	}
 	public void setDescription(String description) {
 		this.description = description;
-	}
-	public Date getDate() {
-		return date;
-	}
-	public void setDate(Date date) {
-		this.date = date;
-	}
-	public Date getTime() {
-		return time;
-	}
-	public void setTime(Date time) {
-		this.time = time;
 	}
 	
 	
