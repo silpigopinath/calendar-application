@@ -1,20 +1,23 @@
 package view;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.util.List;
-
-import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
+import javax.swing.tree.DefaultMutableTreeNode;
 import model.Event;
+
+import javax.swing.JScrollPane;
+import javax.swing.JTree;
 
 public class EventList extends JDialog {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
-
 	/**
 	 * Launch the application.
 	 */
@@ -32,37 +35,60 @@ public class EventList extends JDialog {
 	 * Create the dialog.
 	 */
 	public EventList() {
-		setBounds(100, 100, 450, 387);
+		
+	}
+	public EventList(List<Event> ls) {
+		
+		setBounds(100, 100, 450, 401);
 		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setLayout(new FlowLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		contentPanel.setLayout(null);
 		{
-			JPanel buttonPane = new JPanel();
-			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			getContentPane().add(buttonPane, BorderLayout.SOUTH);
-			{
-				JButton okButton = new JButton("OK");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
+			JScrollPane scrollPane = new JScrollPane();
+			scrollPane.setBounds(0, 0, 434, 362);
+			contentPanel.add(scrollPane);
+			try {
+			    DefaultMutableTreeNode event=new DefaultMutableTreeNode("Event");
+			    DefaultMutableTreeNode title=new DefaultMutableTreeNode("title");  
+			    event.add(title);
+			    
+				
+			    for(int i=0;i<ls.size();i++)
+			    {
+			    	
+			   
+			    String str=ls.get(i).getTitle();
+			    DefaultMutableTreeNode node=new DefaultMutableTreeNode(str);  
+			    title.add(node);
+			    String s1="Start date : "+ls.get(i).getStartDate();
+			    DefaultMutableTreeNode start=new DefaultMutableTreeNode(s1);
+			    String s2="End date : "+ls.get(i).getEndDate();
+			    DefaultMutableTreeNode end=new DefaultMutableTreeNode(s2);
+			    String t1="Start Time :"+ls.get(i).getStartTime();
+			    DefaultMutableTreeNode time1=new DefaultMutableTreeNode(t1);
+			    String t2="End  Time :"+ls.get(i).getEndTime();
+			    DefaultMutableTreeNode time2=new DefaultMutableTreeNode(t2);
+			    String loc="Location  :"+ls.get(i).getLocation();
+			    DefaultMutableTreeNode location=new DefaultMutableTreeNode(loc);
+			    String des="Description :"+ls.get(i).getDescription();
+			    DefaultMutableTreeNode description=new DefaultMutableTreeNode(des);
+			    node.add(start);
+			    node.add(end);
+			    node.add(time1);
+			    node.add(time2);
+			    node.add(location);
+			    node.add(description);
+			    }
+				JTree tree = new JTree(event);
+				
+				scrollPane.setViewportView(tree);
+			} catch (Exception e) {
+				
+				e.printStackTrace();
 			}
-			{
-				JButton cancelButton = new JButton("Cancel");
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
-			}
-		}
-	}
-	
-	public static EventList getEventListDialog(List<Event> eventList) {
-		EventList eventListDialog = new EventList();
-		int size = eventList.size();
-		for(int i = 0; i < size; ++i) {
-			Event event = eventList.get(i);             
 			
 		}
-		return eventListDialog;
 	}
 
 }
