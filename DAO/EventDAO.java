@@ -22,7 +22,7 @@ import java.util.Calendar;
 
 import java.util.List;
 
-
+import javax.swing.table.DefaultTableModel;
 
 import model.Event;
 
@@ -34,15 +34,14 @@ public class EventDAO {
 
 	private static String INSERTSQL = "insert into Event values(?, ? , ?, ?, ?, ?, ?)";
 
-
-
-	
-
 	private static String READDAYSQL = "SELECT *FROM Event WHERE startDate<=? and endDate>=?";
 
+	private static String READMONTHSQL = "SELECT * FROM Event WHERE (startDate BETWEEN ? AND ?) OR (endDate BETWEEN ? AND ?) OR (startDate < ? AND endDate > ?)";
 	
+	private static String READWEEKSQL =  "SELECT * FROM Event WHERE (startDate BETWEEN ? AND ?) OR (endDate BETWEEN ? AND ?) OR (startDate < ? AND endDate > ?)";
 	
 	private static String READBYEVENTSQL="SELECT * FROM Event WHERE  title=? and  startDate<=? and endDate>=?";
+	
 	private static String READBYTIMESQL="SELECT * FROM Event WHERE ((startDate<=?  and endDate>=?)and (startTime<= ? and endTime>= ?) )and title=? ";
 
 	private static String READBYDATETIMESQL="SELECT * FROM Event WHERE  (startDate<= ? and endDate>= ?) and (startTime<= ? and startTime>= ?)";
@@ -81,8 +80,6 @@ public class EventDAO {
 
 
 	}
-
-
 
 	public static void insert(Event evnt) {
 
@@ -156,7 +153,7 @@ public class EventDAO {
 
 	}
 
-public static List<Event> readByDay(java.util.Date date) throws Exception {
+	public static List<Event> readByDay(java.util.Date date) throws Exception {
 
 		Connection con = null;
 
@@ -220,11 +217,7 @@ public static List<Event> readByDay(java.util.Date date) throws Exception {
 
 	}
 
-
-
-	
-
-public static List<Event>  getEvent(String title,java.util.Date date)
+	public static List<Event>  getEvent(String title,java.util.Date date)
 {
 	Connection con = null;
 
@@ -270,7 +263,7 @@ public static List<Event>  getEvent(String title,java.util.Date date)
 	return ls;
 }
 
-public static Event getEventByTime(java.util.Date date, java.util.Date time,String title) throws SQLException
+	public static Event getEventByTime(java.util.Date date, java.util.Date time,String title) throws SQLException
 {
 	Connection con = null;
 	Event evnt = null;
@@ -325,7 +318,7 @@ public static Event getEventByTime(java.util.Date date, java.util.Date time,Stri
 	return evnt;
 }
 
-public static List<Event> readByDateTime(java.util.Date date, java.util.Date time) throws SQLException
+	public static List<Event> readByDateTime(java.util.Date date, java.util.Date time) throws SQLException
 {
 
 	Connection con = null;
@@ -379,7 +372,7 @@ public static List<Event> readByDateTime(java.util.Date date, java.util.Date tim
 	
 }
 
-public static  void removeEvent(Event evnt) throws SQLException
+	public static  void removeEvent(Event evnt) throws SQLException
 {
 	Connection con = null;
 
@@ -411,59 +404,249 @@ public static  void removeEvent(Event evnt) throws SQLException
 	}
 }
 
+	public static DefaultTableModel readByMonth(java.util.Date date) 
+	{
+		Connection con=null;
+		PreparedStatement pStmt=null;
+		DbConnector connector=DbConnector.getInstance();
+		DefaultTableModel eventTable = new DefaultTableModel();
+		eventTable.setColumnCount(2);
+		try {
+			con=connector.getConnection();
+			Calendar cal=Calendar.getInstance();
+			
+			cal.setTime(date);
+			
+			int month = cal.get(Calendar.MONTH);
+			int year = cal.get(Calendar.YEAR);
+			
+			pStmt=con.prepareStatement(READMONTHSQL);
+			java.sql.Date monthStartDate = new java.sql.Date(date.getTime());
+			monthStartDate.setDate(1);
+			java.sql.Date monthEndDate = new java.sql.Date(date.getTime());
+			
+			monthEndDate.setMonth(date.getMonth() + 1);
+			monthEndDate.setDate(1);
+			monthEndDate.setDate(0);
+			
+			pStmt.setDate(1, monthStartDate);
+			pStmt.setDate(2, monthEndDate);
+			pStmt.setDate(3, monthStartDate);
+			pStmt.setDate(4, monthEndDate);
+			pStmt.setDate(5, monthStartDate);
+			pStmt.setDate(6, monthEndDate);
+			
+			ResultSet rs = pStmt.executeQuery();
+			int noEvent = rs.getFetchSize();
+			
+			boolean flag = false;
+			while (rs.next()) {
+				flag = true;
+				Date d=rs.getDate(5);
+				Time t=rs.getTime(6);
+				cal.setTime(d);
+			    cal.setTimeInMillis(t.getTime());
+				
+			    Event evnt = new Event(rs.getString(1), rs.getString(2), rs.getString(3),
+						rs.getDate(4), rs.getTime(5), rs.getDate(6), rs.getTime(7));
+			    java.util.Date endDate = evnt.getEndDate();
+			    java.util.Date startDate = evnt.getStartDate();
+			    java.util.Date monthStartUtilDate = new java.util.Date(monthStartDate.getTime());
+			    java.util.Date monthEndUtilDate = new java.util.Date(monthEndDate.getTime());
+			    if(monthStartUtilDate.getTime() > startDate.getTime()) {
+			    	startDate = monthStartUtilDate;
+			    }
+			    if(monthEndUtilDate.getTime() < endDate.getTime()) {
+			    	endDate = monthEndUtilDate;
+			    }
+				for (int i = startDate.getDate(); i <= endDate.getDate() ; ++i) {
+					Object row[] = {i, evnt};                     
+					eventTable.addRow(row);
+				}
+				
+			}
+			if(!flag)
+			{
+				throw new Exception("No Events for the Month");
+			}
+			return eventTable;
+		
+		} catch (Exception e)
+		{
+		
+			e.printStackTrace();
+		}
+		finally
+		{
+			try {
+				pStmt.close();
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+		}
+		return eventTable;
+		
+		
+		
+	}
+	
+	public static DefaultTableModel readByWeek(java.util.Date date) 
+	{
+		Connection con=null;
+		PreparedStatement pStmt=null;
+		DbConnector connector=DbConnector.getInstance();
+		DefaultTableModel eventTable = new DefaultTableModel();
+		eventTable.setColumnCount(2);
+		try {
+			con=connector.getConnection();
+			Calendar cal=Calendar.getInstance();
+			
+			cal.setTime(date);
+			
+			int month = cal.get(Calendar.MONTH);
+			int year = cal.get(Calendar.YEAR);
+			
+			pStmt=con.prepareStatement(READWEEKSQL);
+			int weekDay = date.getDay();
+			
+			java.sql.Date weekStartDate = new java.sql.Date(date.getTime());
+			weekStartDate.setDate(weekStartDate.getDate() - weekDay);
+			java.sql.Date weekEndDate = new java.sql.Date(date.getTime());
+			weekEndDate.setDate(weekEndDate.getDate() + (6 - weekDay));
+			
+			pStmt.setDate(1, weekStartDate);
+			pStmt.setDate(2, weekEndDate);
+			pStmt.setDate(3, weekStartDate);
+			pStmt.setDate(4, weekEndDate);
+			pStmt.setDate(5, weekStartDate);
+			pStmt.setDate(6, weekEndDate);
+			
+			ResultSet rs = pStmt.executeQuery();
+			int noEvent = rs.getFetchSize();
+			
+			boolean flag = false;
+			while (rs.next()) {
+				flag = true;
+				Date d=rs.getDate(5);
+				Time t=rs.getTime(6);
+				cal.setTime(d);
+			    cal.setTimeInMillis(t.getTime());
+				
+			    Event evnt = new Event(rs.getString(1), rs.getString(2), rs.getString(3),
+						rs.getDate(4), rs.getTime(5), rs.getDate(6), rs.getTime(7));
+			    java.util.Date endDate = evnt.getEndDate();
+			    java.util.Date startDate = evnt.getStartDate();
+			    java.util.Date monthStartUtilDate = new java.util.Date(weekStartDate.getTime());
+			    java.util.Date monthEndUtilDate = new java.util.Date(weekEndDate.getTime());
+			    if(monthStartUtilDate.getTime() > startDate.getTime()) {
+			    	startDate = monthStartUtilDate;
+			    }
+			    if(monthEndUtilDate.getTime() < endDate.getTime()) {
+			    	endDate = monthEndUtilDate;
+			    }
+				for (int i = startDate.getDate(); i <= endDate.getDate() ; ++i) {
+					Object row[] = {i, evnt};                     
+					eventTable.addRow(row);
+				}
+				
+			}
+			if(!flag)
+			{
+				throw new Exception("No Events for the Month");
+			}
+			return eventTable;
+		
+		} catch (Exception e)
+		{
+		
+			e.printStackTrace();
+		}
+		finally
+		{
+			try {
+				pStmt.close();
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+		}
+		return eventTable;
+		
+		
+		
+	}
+	
 
+	
 //REMOVE EVENT
 
 	public static void main(String args[]) {
-
-		try {
-
-
-
-			// DbConnector.getInstance();
-
-//			create();
-
-//			/cal.set(2019,9,13,10,30);
-
-			 Time start = Time.valueOf("4:00:00");
-
-			 long l = start.getTime();
-//
-			 Time end=Time.valueOf("5:00:00");
-			 long l1 = end.getTime();
-//			 insert(new Event("Seminar","Conference Hall","Seminar on the topic women em-Powerment ",new Date(2019-1900,11,11),new Date(l),new Date(2019-1900,11,15),new Date(l1)));
-			 removeEvent(new Event("Seminar","Conference Hall","Seminar on the topic women em-Powerment ",new Date(2019-1900,11,11),new Date(l),new Date(2019-1900,11,15),new Date(l1)));
-			// System.out.println(cal);
-
-			// cal.set(Calendar.DAY_OF_MONTH, 13);
-//
-			Date d=new Date(2019-1900,11,14);
-
-//			List<Event> ls=
-//			Event evnt=getEventByTime(d,new Date(l),"Seminar");
-//			System.out.println("LOC"+evnt.getLocation()+"DES"+evnt.getDescription());
-//		    for(int i=0;i<ls.size();i++)
-//
-//			 {
-//
-//			System.out.println(ls.get(i).getStartDate()+" "+ls.get(i).getStartTime()+" "+ls.get(i).getTitle());
-//
-//			 }
-
-			// System.out.println("No results found");
-
-			// Calendar cal=Calendar.getInstance();
-
-			// System.out.println(cal.get(Calendar.WEEK_OF_YEAR));
-
-		} catch (Exception e) {
-
-			// TODO Auto-generated catch block
-
-			e.printStackTrace();
-
+//		java.util.Date d = new java.util.Date();
+//		d.setDate(2);
+		DefaultTableModel evList = readByWeek(new java.util.Date());
+		
+		System.out.println(evList.getRowCount());
+		for(int i = 0; i<evList.getRowCount(); ++i) {
+			System.out.print(evList.getValueAt(i, 0));
+			Event e = (Event)evList.getValueAt(i, 1);
+			System.out.println("   " + e.getTitle());
 		}
+
+//		try {
+//
+//
+//
+//			// DbConnector.getInstance();
+//
+////			create();
+//
+////			/cal.set(2019,9,13,10,30);
+//
+//			 Time start = Time.valueOf("4:00:00");
+//
+//			 long l = start.getTime();
+////
+//			 Time end=Time.valueOf("5:00:00");
+//			 long l1 = end.getTime();
+////			 insert(new Event("Seminar","Conference Hall","Seminar on the topic women em-Powerment ",new Date(2019-1900,11,11),new Date(l),new Date(2019-1900,11,15),new Date(l1)));
+//			 removeEvent(new Event("Seminar","Conference Hall","Seminar on the topic women em-Powerment ",new Date(2019-1900,11,11),new Date(l),new Date(2019-1900,11,15),new Date(l1)));
+//			// System.out.println(cal);
+//
+//			// cal.set(Calendar.DAY_OF_MONTH, 13);
+////
+//			Date d=new Date(2019-1900,11,14);
+//
+////			List<Event> ls=
+////			Event evnt=getEventByTime(d,new Date(l),"Seminar");
+////			System.out.println("LOC"+evnt.getLocation()+"DES"+evnt.getDescription());
+////		    for(int i=0;i<ls.size();i++)
+////
+////			 {
+////
+////			System.out.println(ls.get(i).getStartDate()+" "+ls.get(i).getStartTime()+" "+ls.get(i).getTitle());
+////
+////			 }
+//
+//			// System.out.println("No results found");
+//
+//			// Calendar cal=Calendar.getInstance();
+//
+//			// System.out.println(cal.get(Calendar.WEEK_OF_YEAR));
+//
+//		} catch (Exception e) {
+//
+//			// TODO Auto-generated catch block
+//
+//			e.printStackTrace();
+//
+//		}
 
 	}
 
