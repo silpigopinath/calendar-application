@@ -34,10 +34,13 @@ public class DayView extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					DayView frame = new DayView(new GregorianCalendar());
+					GregorianCalendar calendar = new GregorianCalendar();
+					calendar.set(Calendar.DATE, 2);
+					DayView frame = new DayView(calendar);
 					frame.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace();
+					// e.printStackTrace();
+					throw e;
 				}
 			}
 		});
@@ -56,8 +59,7 @@ public class DayView extends JFrame {
 		contentPane.setLayout(grid);
 
 		////////////////////////////////
-		String[] week = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
-				"   Saturday" };
+		String[] week = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "   Saturday" };
 		String[] timeInterval = { "12 AM", "01 AM", "02 AM", "03 AM", "04 AM", "05 AM", "06 AM", "07 AM", "08 AM",
 				"09 AM", "10 AM", "11 AM", "12 PM", "01 PM", "02 PM", "03 PM", "04 PM", "05 PM", "06 PM", "07 PM",
 				"08 PM", "09 PM", "10 PM", "11 PM" };
@@ -75,31 +77,38 @@ public class DayView extends JFrame {
 
 		contentPane.add(dayLabel);
 
-		JButton viewAllTasksButton = new JButton("View All Tasks");
-		viewAllTasksButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				try {
-					List<Event> eventList = CalendarController.readDay(calendar.getTime());
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					if (e.getMessage().equals("No Events for the Day")) {
-						// KEEP QUIET
-					}
-				}
+		List<Event> eventList = null;
 
+		try {
+			eventList = CalendarController.readDay(calendar.getTime());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			if (e.getMessage().equals("No Events for the Day")) {
+				// KEEP QUIET
 			}
-		});
-		contentPane.add(viewAllTasksButton);
+		}
 
+		if (eventList.size() > 0) {
+			JButton viewAllTasksButton = new JButton("View All Tasks");
+			viewAllTasksButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+
+				}
+			});
+			contentPane.add(viewAllTasksButton);
+		}
 		JLabel blankLabel2 = new JLabel();
 		contentPane.add(blankLabel2);
 		JLabel blankLabel3 = new JLabel("");
 		contentPane.add(blankLabel3);
+		
+		JButton eventButtonGrid[] = new JButton[24];
 
 		for (int i = 0; i < 48; ++i) {
 			///////////////////////////////////
+
 			String interval = timeInterval[i / 2];
-			int startTimeInt, val;
+			int startTimeInt;
 
 			if (interval.equals("12 AM")) {
 				startTimeInt = 0;
@@ -109,26 +118,34 @@ public class DayView extends JFrame {
 				startTimeInt = Integer.parseInt(interval.substring(0, 2));
 			} else {
 				startTimeInt = Integer.parseInt(interval.substring(0, 2));
+				startTimeInt = startTimeInt + 12;
 			}
-			Date startTime = new Date(calendar.get(Calendar.YEAR) - 1900, calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), startTimeInt, 0);
-			List<Event> eventListOfHour = null;
-			try {
-				eventListOfHour = CalendarController.readByDateTime(calendar.getTime(), startTime);
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			Date currentTime = new Date(calendar.get(Calendar.YEAR) - 1900, calendar.get(Calendar.MONTH),
+					calendar.get(Calendar.DATE), startTimeInt, 0);
 
-			JButton eventButtonGrid[] = new JButton[24];
-			///////////////////////////////////
-			if (i % 2 == 0) {
+			String eventTitle = null;
+			for (int x = 0; x < eventList.size(); ++x) {
+				Event event = eventList.get(x);
+				int startHour = event.getStartTime().getHours(), endHour = event.getEndTime().getHours(), currentHour = currentTime.getHours(); 
+				if(startHour <= currentHour && endHour >= currentHour) {
+					if(eventTitle != null) {
+						eventTitle = "...";
+					}else {
+						eventTitle = event.getTitle();
+					}
+					
+				}
+			}
+			
+			
+			if (i % 2 == 0) { 													//////////////// TIME
 				JLabel timeLabel = new JLabel(timeInterval[i / 2]);
 				contentPane.add(timeLabel);
-			} else if (eventListOfHour.isEmpty()) {
+			}
+			else if(null == eventTitle) {
 				JLabel blankLabel = new JLabel("");
 				contentPane.add(blankLabel);
-			} else if (eventListOfHour.size() == 1) {
-				String eventTitle = eventListOfHour.get(0).getTitle();
+			}else {
 				eventButtonGrid[i / 2] = new JButton(eventTitle);
 				eventButtonGrid[i / 2].addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
@@ -144,26 +161,10 @@ public class DayView extends JFrame {
 						}
 					}
 				});
-
 				contentPane.add(eventButtonGrid[i / 2]);
-			} else {
-				String eventTitle = "...";
-				eventButtonGrid[i / 2] = new JButton(eventTitle);
-				eventButtonGrid[i / 2].addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						for (int row = 0; row < 24; row++) {
-
-							if (eventButtonGrid[row] != null && e.getSource() == eventButtonGrid[row]) {
-								//////////////////// (DATE) LIST<EVENT> <DIALOG>
-								System.out.println(eventButtonGrid[row]);
-								System.out.println(row + "" + row);
-
-							}
-
-						}
-					}
-				});
 			}
+			
+			///////////////////////////////////
 		}
 	}
 

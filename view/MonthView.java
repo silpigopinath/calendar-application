@@ -10,8 +10,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 import controller.CalendarController;
+import dao.EventDAO;
 import model.Event;
 
 import java.awt.GridLayout;
@@ -65,6 +67,7 @@ public class MonthView extends JFrame {
 		int totalDaysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 		int month = calendar.get(Calendar.MONTH);
 		int year = calendar.get(Calendar.YEAR);
+		int date = calendar.get(Calendar.DATE);
 		int firstDay = firstDayInMonth(month, year);
 		////////////////////////////////
 
@@ -78,6 +81,13 @@ public class MonthView extends JFrame {
 		int COLS = 7;
 		for (int i = 0; i < ROWS; ++i) {
 
+			DefaultTableModel eventTable = null;
+			try {
+				eventTable = CalendarController.readByMonth(new Date(year - 1900, month, date));
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+
 			for (int j = 0; j < COLS; ++j) {
 				if (i == 0 && j < firstDay - 1) {
 					JLabel blankDay = new JLabel();
@@ -85,28 +95,31 @@ public class MonthView extends JFrame {
 				}
 				///////////////////////////////////////////////////////////////////////////////////////////
 				else if ((i * COLS) + (j + 1) <= (firstDay - 1) + totalDaysInMonth) {
-					
+
 					String event1 = null, event2 = null, event3 = null;
+
 					List<Event> eventsToday = null;
 					int currentDate = (i * 7) + (j + 1) - (firstDay - 1);
-					try {
-						eventsToday = CalendarController.readDay(new Date(year - 1900, month, currentDate));
-						
-						Event event = eventsToday.get(0);
-						event1 = event.getTitle();
-						event = eventsToday.get(1);
-						event2 = event.getTitle();
-						event = eventsToday.get(2);
-						event3 = event.getTitle();
-						if (eventsToday.size() > 3) {
-							event3 = "...";
+
+					int eventCount = 0;
+					Event event = null;
+					for (int x = 0; x < eventTable.getRowCount(); ++x) {
+						if ((int) eventTable.getValueAt(x, 0) == currentDate) {
+							event = (Event) eventTable.getValueAt(x, 1);
+							eventCount++;
+
+							if (eventCount == 1) {
+								event1 = event.getTitle();
+							} else if (eventCount == 2) {
+								event2 = event.getTitle();
+							} else if (eventCount == 3) {
+								event3 = event.getTitle();
+							} else {
+								event3 = "...";
+							}
 						}
-					} catch (Exception e1) {
-//						e1.printStackTrace();
-						//KEEP QUIET
 					}
 
-					
 					datePanelGrid[i][j] = new DatePanel(Integer.toString(currentDate), event1, event2, event3);
 					///////////////////////////////////////////
 					datePanelGrid[i][j].getBtnDateButton().addActionListener(new ActionListener() {
@@ -124,8 +137,11 @@ public class MonthView extends JFrame {
 							}
 						}
 					});
+					
 
-					if (datePanelGrid[i][j].getBtnEvent1() != null) {
+					//////////////////////////////////////////////////////////////////////
+
+					if (event1 != null) {
 						datePanelGrid[i][j].getBtnEvent1().addActionListener(new ActionListener() {
 							public void actionPerformed(ActionEvent e) {
 								for (int row = 0; row < ROWS; row++) {
@@ -142,24 +158,23 @@ public class MonthView extends JFrame {
 							}
 						});
 					}
-					if (datePanelGrid[i][j].getBtnEvent2() != null) {
+					if (event2 != null) {
 						datePanelGrid[i][j].getBtnEvent2().addActionListener(new ActionListener() {
 							public void actionPerformed(ActionEvent e) {
-								for (int row = 0; row < ROWS; row++) {
-									for (int col = 0; col < COLS; col++) {
-										if (datePanelGrid[row][col] != null
-												&& e.getSource() == datePanelGrid[row][col].getBtnEvent2()) {
+								
+										
 											//////////////////// (DATE, TITLE) EVENT <DIALOG>
-											System.out.println(datePanelGrid[row][col].getBtnEvent2().getText());
-											System.out.println(row + "" + col);
+											System.out.println(currentDate);
+//											System.out.println(datePanelGrid[i][j].getBtnEvent2().getText());
+//											System.out.println(i + "" + j);
 
-										}
+										
 									}
-								}
-							}
+								
+							
 						});
 					}
-					if (datePanelGrid[i][j].getBtnEvent3() != null) {
+					if (event3 != null) {
 						datePanelGrid[i][j].getBtnEvent3().addActionListener(new ActionListener() {
 							public void actionPerformed(ActionEvent e) {
 								for (int row = 0; row < ROWS; row++) {

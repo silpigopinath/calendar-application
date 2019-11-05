@@ -14,6 +14,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import com.toedter.calendar.JCalendar;
+import com.toedter.calendar.JDateChooser;
 import com.toedter.calendar.JMonthChooser;
 import com.toedter.calendar.JYearChooser;
 
@@ -59,7 +60,7 @@ public class HomePage extends JFrame {
 	public HomePage() {
 		setTitle("Calendar");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(50, 50, 1200, 800);
+		setBounds(50, 50, 885, 800);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -68,14 +69,14 @@ public class HomePage extends JFrame {
 		calendar = new GregorianCalendar();               ////////////INITIALIZING CALENDAR
 
 		JMenuBar menuBar = new JMenuBar();
-		menuBar.setBounds(0, 0, 1184, 21);
+		menuBar.setBounds(0, 0, 885, 21);
 		contentPane.add(menuBar);
 
-		JMenu mnView = new JMenu("View");
-		menuBar.add(mnView);
+//		JMenu mnView = new JMenu("View");
+//		menuBar.add(mnView);
 
 		JMenuItem mntmMonthView = new JMenuItem("Month View");
-		mnView.add(mntmMonthView);
+		menuBar.add(mntmMonthView);
 		mntmMonthView.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				contentPane.removeAll();                              
@@ -86,7 +87,7 @@ public class HomePage extends JFrame {
 		});
 
 		JMenuItem mntmWeekView = new JMenuItem("Week View");
-		mnView.add(mntmWeekView);
+		menuBar.add(mntmWeekView);
 		mntmWeekView.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				contentPane.removeAll();                                 
@@ -97,7 +98,7 @@ public class HomePage extends JFrame {
 		});
 		
 		JMenuItem mntmDayView = new JMenuItem("Day View");
-		mnView.add(mntmDayView);
+		menuBar.add(mntmDayView);
 		mntmDayView.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				contentPane.removeAll();                               
@@ -107,7 +108,7 @@ public class HomePage extends JFrame {
 			}
 		});
 
-		JMenuItem mntmAddEvent = new JMenu("Add Event");
+		JMenuItem mntmAddEvent = new JMenuItem("Add Event");
 		menuBar.add(mntmAddEvent);
 		mntmAddEvent.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -116,6 +117,25 @@ public class HomePage extends JFrame {
 				dialog.setVisible(true);
 			}
 		});
+		
+		JMenuItem mntmGoToToday = new JMenuItem("Go To Today");
+		menuBar.add(mntmGoToToday);
+		mntmGoToToday.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+//				ACTION HERE
+			}
+		});
+		
+//		JDateChooser dateChooser = new JDateChooser();
+//		dateChooser.setBounds(122, 73, 241, 20);
+//		menuBar.add(dateChooser);
+//		dateChooser.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent arg0) {
+//				AddEvent dialog = new AddEvent();
+//				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+//				dialog.setVisible(true);
+//			}
+//		});
 
 		//////////////////////
 		showMonthView();
