@@ -148,8 +148,9 @@ public class AddEvent extends JDialog {
 						}
 						else if(endDate != null && startDate.compareTo(endDate) > 0) {
 							lblWarning.setText("End Date Before Start Date!!!");
-						}
-						else {
+						}else if(startTimeString.compareTo(endTimeString) == 0) {
+							lblWarning.setText("End Time Cannot be Equal to Start Date!!!");
+						}else {
 							if(endDate == null) {
 								endDate = startDate;
 							}

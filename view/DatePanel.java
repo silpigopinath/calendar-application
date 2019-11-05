@@ -15,16 +15,15 @@ import java.awt.event.ActionListener;
 import javax.swing.JLabel;
 
 public class DatePanel extends JPanel {
-	
+
 	JButton btnDateButton;
-	
-//	public void actionPerformed(ActionEvent e) {
-//		System.out.println("ButtonClick" + this.getName());
-//	}
+
+	// public void actionPerformed(ActionEvent e) {
+	// System.out.println("ButtonClick" + this.getName());
+	// }
 	JButton btnEvent1;
 	JButton btnEvent2;
 	JButton btnEvent3;
-	
 
 	public JButton getBtnDateButton() {
 		return btnDateButton;
@@ -50,31 +49,63 @@ public class DatePanel extends JPanel {
 		this.setPreferredSize(new Dimension(120, 100));
 		setLayout(null);
 		
-		btnDateButton = new JButton(date);
-		btnDateButton.setBounds(0, 1, 115, 50);
-		add(btnDateButton);
-//		btnDateButton.addActionListener(this);
-		
-		if(event1 != null) {
-		btnEvent1 = new JButton(event1);
-		btnEvent1.setBounds(0, 50, 115, 14);
-		add(btnEvent1);
+		if (event1 != null) {
+			btnEvent1 = new JButton(event1);
+			
+		}
+
+		if (event2 != null) {
+			btnEvent2 = new JButton(event2);
+			
+		}
+
+		if (event3 != null) {
+			btnEvent3 = new JButton(event3);
+			
 		}
 		
-		if(event2 != null) {
-		btnEvent2 = new JButton(event2);
-		btnEvent2.setBounds(0, 64, 115, 14);
-		add(btnEvent2);
+		if (event1 == null && event2 == null && event3 == null) {
+			btnDateButton = new JButton(date);
+			btnDateButton.setBounds(3, 2, 110, 92);
+			add(btnDateButton);
+		}else if (event2 == null && event3 == null) {
+			btnDateButton = new JButton(date);
+			btnDateButton.setBounds(3, 2, 110, 78);
+			add(btnDateButton);
+			
+			btnEvent1.setBounds(3, 78, 110, 14);
+			add(btnEvent1);
+			
+		}else if (event3 == null) {
+			btnDateButton = new JButton(date);
+			btnDateButton.setBounds(3, 2, 110, 64);
+			add(btnDateButton);
+			
+			btnEvent1.setBounds(3, 64, 110, 14);
+			add(btnEvent1);
+			
+			btnEvent2.setBounds(3, 78, 110, 14);
+			add(btnEvent2);
+			
+		} else {
+			btnDateButton = new JButton(date);
+			btnDateButton.setBounds(3, 2, 110, 50);
+			add(btnDateButton);
+			
+			btnEvent1.setBounds(3, 50, 110, 14);
+			add(btnEvent1);
+			
+			btnEvent2.setBounds(3, 64, 110, 14);
+			add(btnEvent2);
+			
+			btnEvent3.setBounds(3, 78, 110, 14);
+			add(btnEvent3);
 		}
+		// btnDateButton.addActionListener(this);
+
 		
-		if(event3 != null) {
-		btnEvent3 = new JButton(event3);
-		btnEvent3.setBounds(0, 78, 115, 14);
-		add(btnEvent3);
-		}
 	}
-	
-	
+
 	public static DatePanel getDatePanel(String date, String event1, String event2, String event3) {
 		return new DatePanel(date, event1, event2, event3);
 	}

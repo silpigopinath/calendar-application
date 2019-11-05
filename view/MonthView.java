@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 
@@ -9,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
@@ -85,7 +87,7 @@ public class MonthView extends JFrame {
 			try {
 				eventTable = CalendarController.readByMonth(new Date(year - 1900, month, date));
 			} catch (Exception ex) {
-				ex.printStackTrace();
+				// ex.printStackTrace();
 			}
 
 			for (int j = 0; j < COLS; ++j) {
@@ -103,24 +105,33 @@ public class MonthView extends JFrame {
 
 					int eventCount = 0;
 					Event event = null;
-					for (int x = 0; x < eventTable.getRowCount(); ++x) {
-						if ((int) eventTable.getValueAt(x, 0) == currentDate) {
-							event = (Event) eventTable.getValueAt(x, 1);
-							eventCount++;
+					if (eventTable != null) {
+						for (int x = 0; x < eventTable.getRowCount(); ++x) {
+							if ((int) eventTable.getValueAt(x, 0) == currentDate) {
+								event = (Event) eventTable.getValueAt(x, 1);
+								eventCount++;
 
-							if (eventCount == 1) {
-								event1 = event.getTitle();
-							} else if (eventCount == 2) {
-								event2 = event.getTitle();
-							} else if (eventCount == 3) {
-								event3 = event.getTitle();
-							} else {
-								event3 = "...";
+								if (eventCount == 1) {
+									event1 = event.getTitle();
+								} else if (eventCount == 2) {
+									event2 = event.getTitle();
+								} else if (eventCount == 3) {
+									event3 = event.getTitle();
+								} else {
+									event3 = "...";
+								}
 							}
 						}
 					}
+//					System.out.println(Calendar.getInstance().get(Calendar.YEAR));
+//					System.out.println(Calendar.getInstance().);
+					
 
 					datePanelGrid[i][j] = new DatePanel(Integer.toString(currentDate), event1, event2, event3);
+					if(Calendar.getInstance().get(Calendar.YEAR) == year && Calendar.getInstance().get(Calendar.MONTH) == month && Calendar.getInstance().get(Calendar.DATE) == currentDate) {
+						Border border = BorderFactory.createMatteBorder(1, 1, 1, 1, Color.MAGENTA);
+						datePanelGrid[i][j].setBorder(border);
+					}
 					///////////////////////////////////////////
 					datePanelGrid[i][j].getBtnDateButton().addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
@@ -189,12 +200,16 @@ public class MonthView extends JFrame {
 								for (int row = 0; row < ROWS; row++) {
 									for (int col = 0; col < COLS; col++) {
 										if (datePanelGrid[row][col] != null
-												&& e.getSource() == datePanelGrid[row][col].getBtnEvent3()) {
+												&& e.getSource() == datePanelGrid[row][col].getBtnEvent2()) {
 											//////////////////// (DATE, TITLE) EVENT <DIALOG>
+											int date = Integer
+													.parseInt(datePanelGrid[row][col].getBtnDateButton().getText());
 											try {
 												List<Event> eventList = CalendarController.getEvent(
-														datePanelGrid[row][col].getBtnEvent1().getText(),
-														new Date(year - 1900, month, date)); //// TITLE,DATE,TIME
+														datePanelGrid[row][col].getBtnEvent2().getText(),
+														new Date(year - 1900, month, date));
+														System.out.println("Event 2");
+												//// TITLE,DATE,TIME
 												if (eventList.size() == 1) {
 													EventDetails.viewEventDetails(eventList.get(0));
 												} else {
@@ -223,11 +238,14 @@ public class MonthView extends JFrame {
 										if (datePanelGrid[row][col] != null
 												&& e.getSource() == datePanelGrid[row][col].getBtnEvent3()) {
 											//////////////////// (DATE, TITLE) EVENT <DIALOG>
-											if ("...".equals(datePanelGrid[row][col].getBtnEvent1().getText())) {
+											int date = Integer
+													.parseInt(datePanelGrid[row][col].getBtnDateButton().getText());
+											if ("...".equals(datePanelGrid[row][col].getBtnEvent3().getText())) {
 												try {
 													List<Event> eventList = CalendarController
 															.readDay(new Date(year - 1900, month, date));
 													EventList.getEventList(eventList);
+													System.out.println(date + " " + month + " ");
 												} catch (Exception e1) {
 													// TODO Auto-generated catch block
 													// e1.printStackTrace();

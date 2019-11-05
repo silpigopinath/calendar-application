@@ -104,7 +104,7 @@ public class HomePage extends JFrame {
 				contentPane.removeAll();                               
 				SwingUtilities.updateComponentTreeUI(contentPane);
 				contentPane.add(menuBar); 
-				showDayView(calendar);
+				showDayView();
 			}
 		});
 
@@ -123,20 +123,15 @@ public class HomePage extends JFrame {
 		mntmGoToToday.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 //				ACTION HERE
+				contentPane.removeAll();                               
+				SwingUtilities.updateComponentTreeUI(contentPane);
+				contentPane.add(menuBar); 
+//				calendar.set(Calendar.DAY_OF_YEAR, new GregorianCalendar().DAY_OF_YEAR);
+				calendar = new GregorianCalendar();
+				showDayView();
 			}
 		});
 		
-//		JDateChooser dateChooser = new JDateChooser();
-//		dateChooser.setBounds(122, 73, 241, 20);
-//		menuBar.add(dateChooser);
-//		dateChooser.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent arg0) {
-//				AddEvent dialog = new AddEvent();
-//				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-//				dialog.setVisible(true);
-//			}
-//		});
-
 		//////////////////////
 		showMonthView();
 		/////////////////////
@@ -251,7 +246,50 @@ public class HomePage extends JFrame {
 		/////////////////////////////
 	}
 	
-	public void showDayView(GregorianCalendar calendar) {
+	public void showDayView() {
+		
+		String[] months = {"January", "February", "March", "April", "May", "June", "July",
+				"August", "September", "October", "November", "December"};
+		lblMonthLabel = new JLabel(months[calendar.get(Calendar.MONTH)]);
+		lblMonthLabel.setBounds(336, 22, 65, 26);
+
+		lblYearLabel = new JLabel(Integer.toString(calendar.get(Calendar.YEAR)));
+		lblYearLabel.setBounds(405, 22, 33, 26);
+		
+		JButton btnLeftButton = new JButton("<");
+		btnLeftButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int month = calendar.get(Calendar.MONTH);
+				int date = calendar.get(Calendar.DAY_OF_YEAR);
+				calendar.set(Calendar.DAY_OF_YEAR, date-1);
+				System.out.println(calendar.get(Calendar.DATE));
+				contentPane.remove(calendarPanel);
+				contentPane.remove(lblMonthLabel);
+				contentPane.remove(lblYearLabel);
+				showDayView();
+			}
+		});
+		btnLeftButton.setBounds(281, 22, 41, 22);
+		contentPane.add(btnLeftButton);
+		
+		JButton btnRightButton = new JButton(">");
+		btnRightButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int month = calendar.get(Calendar.MONTH);
+				int date = calendar.get(Calendar.DAY_OF_YEAR);
+				calendar.set(Calendar.DAY_OF_YEAR, date+1);                            
+				contentPane.remove(calendarPanel);
+				contentPane.remove(lblMonthLabel);
+				contentPane.remove(lblYearLabel);
+				showDayView();
+			}
+		});
+		btnRightButton.setBounds(445, 22, 41, 22);
+		contentPane.add(btnRightButton);
+		
+		contentPane.add(lblMonthLabel);
+		contentPane.add(lblYearLabel);
+		
 		DayView day = new DayView(calendar);
 		calendarPanel = day.getDayView();
 		calendarPanel.setBounds(0, 47, 870, 730);
