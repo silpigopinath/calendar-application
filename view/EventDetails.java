@@ -48,19 +48,13 @@ public class EventDetails extends JDialog {
   private static CalendarController controller;
 
 	/**
-
 	 * Launch the application.
-
 	 */
 
-	public static void main(String[] args) {
+	public static void viewEventDetails(Event event) {
 
 		try {
-			Time start = Time.valueOf("4:30:00");
-
-			 long l = start.getTime();
-
-			EventDetails dialog = new EventDetails("Seminar",new Date(2019-1900,11,11),new Date(l));
+			EventDetails dialog = new EventDetails(event);
 
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
@@ -68,18 +62,31 @@ public class EventDetails extends JDialog {
 
 		} catch (Exception e) {
 
-			e.printStackTrace();
+			throw e;
+
+		}
+
+	}
+	
+	public static void viewEventDetails(String title,Date date,Date time) {
+
+		try {
+			EventDetails dialog = new EventDetails(title, date, time);
+
+			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+
+			dialog.setVisible(true);
+
+		} catch (Exception e) {
+
+			throw e;
 
 		}
 
 	}
 
-
-
 	/**
-
 	 * Create the dialog.
-
 	 */
 	public EventDetails()
 	{
@@ -106,7 +113,7 @@ public class EventDetails extends JDialog {
 		}
 
 	
-public EventDetails( String title,Date date,Date time) {
+	public EventDetails( String title,Date date,Date time) {
 
 		
 
@@ -133,11 +140,7 @@ public EventDetails( String title,Date date,Date time) {
 		}
 }
 
-			
-
-		
-
-		public void display(Event evnt)
+	public void display(Event evnt)
 		{
 
 			txtEventName = new JTextField();
@@ -454,10 +457,5 @@ public EventDetails( String title,Date date,Date time) {
 					});
 					buttonPane.add(cancelButton);
 		}
+
 }
-
-				
-
-			
-		
-

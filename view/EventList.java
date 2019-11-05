@@ -28,14 +28,13 @@ public class EventList extends JDialog {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	public static void getEventList(List<Event> ls) {
 		try {
-			List<Event>ls=CalendarController.readDay(new Date(2019-1900,11,11));
 			EventList dialog = new EventList(ls);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw e;
 		}
 	}
 
@@ -46,6 +45,7 @@ public class EventList extends JDialog {
 		getContentPane().setLayout(null);
 		
 	}
+	
 	public EventList(List<Event> ls) {
 		
 		setBounds(100, 100, 450, 401);
