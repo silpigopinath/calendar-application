@@ -1,11 +1,16 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+
+import controller.CalendarController;
 import model.Event;
 
 import javax.swing.JScrollPane;
@@ -18,12 +23,15 @@ public class EventList extends JDialog {
 	 */
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
+	private static JTree tree;
+	private static Event evnt;
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
-			EventList dialog = new EventList();
+			List<Event>ls=CalendarController.readDay(new Date(2019-1900,11,11));
+			EventList dialog = new EventList(ls);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -35,6 +43,7 @@ public class EventList extends JDialog {
 	 * Create the dialog.
 	 */
 	public EventList() {
+		getContentPane().setLayout(null);
 		
 	}
 	public EventList(List<Event> ls) {
@@ -49,29 +58,30 @@ public class EventList extends JDialog {
 			scrollPane.setBounds(0, 0, 434, 362);
 			contentPanel.add(scrollPane);
 			try {
-			    DefaultMutableTreeNode event=new DefaultMutableTreeNode("Event");
-			    DefaultMutableTreeNode title=new DefaultMutableTreeNode("title");  
-			    event.add(title);
+				if(ls!=null)
+				{
+			    DefaultMutableTreeNode event=new DefaultMutableTreeNode("Events");
+			   
 			    
 				
 			    for(int i=0;i<ls.size();i++)
 			    {
 			    	
-			   
-			    String str=ls.get(i).getTitle();
+			   evnt=ls.get(i);
+			    String str=evnt.getTitle();
 			    DefaultMutableTreeNode node=new DefaultMutableTreeNode(str);  
-			    title.add(node);
-			    String s1="Start date : "+ls.get(i).getStartDate();
+			    event.add(node);
+			    String s1="Start date : "+evnt.getStartDate();
 			    DefaultMutableTreeNode start=new DefaultMutableTreeNode(s1);
-			    String s2="End date : "+ls.get(i).getEndDate();
+			    String s2="End date : "+evnt.getEndDate();
 			    DefaultMutableTreeNode end=new DefaultMutableTreeNode(s2);
-			    String t1="Start Time :"+ls.get(i).getStartTime();
+			    String t1="Start Time :"+evnt.getStartTime();
 			    DefaultMutableTreeNode time1=new DefaultMutableTreeNode(t1);
-			    String t2="End  Time :"+ls.get(i).getEndTime();
+			    String t2="End  Time :"+evnt.getEndTime();
 			    DefaultMutableTreeNode time2=new DefaultMutableTreeNode(t2);
-			    String loc="Location  :"+ls.get(i).getLocation();
+			    String loc="Location  :"+evnt.getLocation();
 			    DefaultMutableTreeNode location=new DefaultMutableTreeNode(loc);
-			    String des="Description :"+ls.get(i).getDescription();
+			    String des="Description :"+evnt.getDescription();
 			    DefaultMutableTreeNode description=new DefaultMutableTreeNode(des);
 			    node.add(start);
 			    node.add(end);
@@ -80,15 +90,43 @@ public class EventList extends JDialog {
 			    node.add(location);
 			    node.add(description);
 			    }
-				JTree tree = new JTree(event);
+				tree = new JTree(event);
 				
 				scrollPane.setViewportView(tree);
-			} catch (Exception e) {
+				tree.addTreeSelectionListener(new TreeSelectionListener() {
+				    public void valueChanged(TreeSelectionEvent e) {
+				    	
+				    	DefaultMutableTreeNode root = (DefaultMutableTreeNode)
+		                           tree.getModel().getRoot();
+				        DefaultMutableTreeNode node = (DefaultMutableTreeNode)
+				                           tree.getLastSelectedPathComponent();
+				         
+				        if(node.isLeaf())
+				        {
+				        	DefaultMutableTreeNode parent = (DefaultMutableTreeNode)
+			                           node.getParent(); 
+				        	System.out.println(root.getIndex(parent));
+				        	int index=root.getIndex(parent);
+				        	System.out.println(ls.get(index).getTitle());			        	
+				        	new EventDetails(ls.get(index)).setVisible(true);
+				        	}
+				        else if(!node.isRoot())
+				        {
+				        	int index=root.getIndex(node);
+				        	new EventDetails(ls.get(index)).setVisible(true);
+				        }
+				        
+				        
+				    }
+				});
+			}
+			}catch (Exception e) {
 				
 				e.printStackTrace();
 			}
 			
 		}
+
 	}
 
 }
