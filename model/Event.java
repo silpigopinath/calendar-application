@@ -49,21 +49,10 @@ public class Event {
 
 	}
 
-	public void setStartDate(Date startDate) {
-
-		this.startDate = startDate;
-
-	}
 
 	public Date getStartTime() {
 
 		return startTime;
-
-	}
-
-	public void setStartTime(Date startTime) {
-
-		this.startTime = startTime;
 
 	}
 
@@ -73,11 +62,6 @@ public class Event {
 
 	}
 
-	public void setEndDate(Date endDate) {
-
-		this.endDate = endDate;
-
-	}
 
 	public Date getEndTime() {
 
@@ -85,23 +69,7 @@ public class Event {
 
 	}
 
-	public void setEndTime(Date endTime) {
 
-		this.endTime = endTime;
-
-	}
-
-//	public String getEventId() {
-//
-//		return eventId;
-//
-//	}
-//
-//	public void setEventId(String eventId) {
-//
-//		this.eventId = eventId;
-//
-//	}
 
 	public String getLocation() {
 
@@ -109,11 +77,7 @@ public class Event {
 
 	}
 
-	public void setLocation(String location) {
 
-		this.location = location;
-
-	}
 
 	public String getTitle() {
 
@@ -121,28 +85,12 @@ public class Event {
 
 	}
 
-	public void setTitle(String title) {
-
-		this.title = title;
-
-	}
 
 	public String getDescription() {
 
 		return description;
 
 	}
-
-	public void setDescription(String description) {
-
-		this.description = description;
-
-	}
-
-	
-
-	
-
 
 
 }
