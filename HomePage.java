@@ -191,8 +191,6 @@ public class HomePage extends JFrame {
 		calendarPanel.setBounds(0, 47, 870, 730);
 		contentPane.add(calendarPanel);
 		contentPane.add(menuBar);
-//		frame.add(contentPane);
-//		SwingUtilities.updateComponentTreeUI(contentPane);
 		SwingUtilities.updateComponentTreeUI(contentPane);
 		////////////////////////////
 		viewIndicator = "m";
@@ -276,7 +274,6 @@ public class HomePage extends JFrame {
 				int month = calendar.get(Calendar.MONTH);
 				int date = calendar.get(Calendar.DAY_OF_YEAR);
 				calendar.set(Calendar.DAY_OF_YEAR, date-1);
-				System.out.println(calendar.get(Calendar.DATE));
 				contentPane.remove(calendarPanel);
 				contentPane.remove(lblMonthLabel);
 				contentPane.remove(lblYearLabel);
