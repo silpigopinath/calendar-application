@@ -10,11 +10,7 @@ import dao.EventDAO;
 import model.Event;
 
 public class CalendarController {
-	private Event evnt;
 
-	CalendarController(Event evnt) {
-		this.evnt = evnt;
-	}
 
 	public static void addEvent(Event evnt) {
 		EventDAO.insert(evnt);
