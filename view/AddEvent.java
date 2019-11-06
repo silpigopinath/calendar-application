@@ -183,7 +183,6 @@ public class AddEvent extends JDialog {
 								endTimeInt = Integer.parseInt(endVal) + 12;
 							}
 
-							System.out.println(endTimeInt);
 							startTime = new Date(startDate.getYear(), startDate.getMonth(), startDate.getDate(),startTimeInt, 0);
 							endTime = new Date(endDate.getYear(), endDate.getMonth(), endDate.getDate(), endTimeInt, 0);
 

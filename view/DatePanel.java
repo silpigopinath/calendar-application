@@ -17,10 +17,6 @@ import javax.swing.JLabel;
 public class DatePanel extends JPanel {
 
 	JButton btnDateButton;
-
-	// public void actionPerformed(ActionEvent e) {
-	// System.out.println("ButtonClick" + this.getName());
-	// }
 	JButton btnEvent1;
 	JButton btnEvent2;
 	JButton btnEvent3;
@@ -101,7 +97,6 @@ public class DatePanel extends JPanel {
 			btnEvent3.setBounds(3, 78, 110, 14);
 			add(btnEvent3);
 		}
-		// btnDateButton.addActionListener(this);
 
 		
 	}

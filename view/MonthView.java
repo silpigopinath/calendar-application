@@ -1,12 +1,10 @@
 package view;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -15,7 +13,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import controller.CalendarController;
-import dao.EventDAO;
 import model.Event;
 
 import java.awt.GridLayout;
@@ -25,7 +22,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.awt.GridBagLayout;
 
 public class MonthView extends JFrame {
 
@@ -99,10 +95,7 @@ public class MonthView extends JFrame {
 				else if ((i * COLS) + (j + 1) <= (firstDay - 1) + totalDaysInMonth) {
 
 					String event1 = null, event2 = null, event3 = null;
-
-					List<Event> eventsToday = null;
 					int currentDate = (i * 7) + (j + 1) - (firstDay - 1);
-
 					int eventCount = 0;
 					Event event = null;
 					if (eventTable != null) {
@@ -123,12 +116,12 @@ public class MonthView extends JFrame {
 							}
 						}
 					}
-//					System.out.println(Calendar.getInstance().get(Calendar.YEAR));
-//					System.out.println(Calendar.getInstance().);
 					
 
 					datePanelGrid[i][j] = new DatePanel(Integer.toString(currentDate), event1, event2, event3);
-					if(Calendar.getInstance().get(Calendar.YEAR) == year && Calendar.getInstance().get(Calendar.MONTH) == month && Calendar.getInstance().get(Calendar.DATE) == currentDate) {
+					if (Calendar.getInstance().get(Calendar.YEAR) == year
+							&& Calendar.getInstance().get(Calendar.MONTH) == month
+							&& Calendar.getInstance().get(Calendar.DATE) == currentDate) {
 						Border border = BorderFactory.createMatteBorder(1, 1, 1, 1, Color.MAGENTA);
 						datePanelGrid[i][j].setBorder(border);
 					}
@@ -147,12 +140,8 @@ public class MonthView extends JFrame {
 													.readDay(new Date(year - 1900, month, date));
 											EventList.getEventList(eventList);
 										} catch (Exception e1) {
-											// TODO Auto-generated catch block
 											// e1.printStackTrace();
 										}
-										//////////////////// (DATE) LIST<EVENT> <DIALOG>
-										System.out.println(datePanelGrid[row][col].getBtnDateButton().getText());
-										System.out.println(row + "" + col);
 
 									}
 								}
@@ -181,12 +170,8 @@ public class MonthView extends JFrame {
 													EventList.getEventList(eventList);
 												}
 											} catch (Exception e1) {
-												// TODO Auto-generated catch block
 												// e1.printStackTrace();
 											}
-											//////////////////// (DATE, TITLE) EVENT <DIALOG>
-											System.out.println(datePanelGrid[row][col].getBtnEvent1().getText());
-											System.out.println(row + "" + col);
 
 										}
 									}
@@ -201,27 +186,20 @@ public class MonthView extends JFrame {
 									for (int col = 0; col < COLS; col++) {
 										if (datePanelGrid[row][col] != null
 												&& e.getSource() == datePanelGrid[row][col].getBtnEvent2()) {
-											//////////////////// (DATE, TITLE) EVENT <DIALOG>
 											int date = Integer
 													.parseInt(datePanelGrid[row][col].getBtnDateButton().getText());
 											try {
 												List<Event> eventList = CalendarController.getEvent(
 														datePanelGrid[row][col].getBtnEvent2().getText(),
 														new Date(year - 1900, month, date));
-														System.out.println("Event 2");
-												//// TITLE,DATE,TIME
 												if (eventList.size() == 1) {
 													EventDetails.viewEventDetails(eventList.get(0));
 												} else {
 													EventList.getEventList(eventList);
 												}
 											} catch (Exception e1) {
-												// TODO Auto-generated catch block
 												// e1.printStackTrace();
 											}
-
-											System.out.println(datePanelGrid[row][col].getBtnEvent3().getText());
-											System.out.println(row + "" + col);
 
 										}
 									}
@@ -237,7 +215,6 @@ public class MonthView extends JFrame {
 									for (int col = 0; col < COLS; col++) {
 										if (datePanelGrid[row][col] != null
 												&& e.getSource() == datePanelGrid[row][col].getBtnEvent3()) {
-											//////////////////// (DATE, TITLE) EVENT <DIALOG>
 											int date = Integer
 													.parseInt(datePanelGrid[row][col].getBtnDateButton().getText());
 											if ("...".equals(datePanelGrid[row][col].getBtnEvent3().getText())) {
@@ -245,28 +222,23 @@ public class MonthView extends JFrame {
 													List<Event> eventList = CalendarController
 															.readDay(new Date(year - 1900, month, date));
 													EventList.getEventList(eventList);
-													System.out.println(date + " " + month + " ");
 												} catch (Exception e1) {
-													// TODO Auto-generated catch block
 													// e1.printStackTrace();
 												}
 											} else {
 												try {
 													List<Event> eventList = CalendarController.getEvent(
 															datePanelGrid[row][col].getBtnEvent1().getText(),
-															new Date(year - 1900, month, date)); //// TITLE,DATE,TIME
+															new Date(year - 1900, month, date)); 
 													if (eventList.size() == 1) {
 														EventDetails.viewEventDetails(eventList.get(0));
 													} else {
 														EventList.getEventList(eventList);
 													}
 												} catch (Exception e1) {
-													// TODO Auto-generated catch block
 													// e1.printStackTrace();
 												}
 											}
-											System.out.println(datePanelGrid[row][col].getBtnEvent3().getText());
-											System.out.println(row + "" + col);
 
 										}
 									}

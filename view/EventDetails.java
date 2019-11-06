@@ -1,7 +1,5 @@
 package view;
 
-
-
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -27,11 +25,7 @@ import java.sql.Time;
 import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
 
-
-
 public class EventDetails extends JDialog {
-
-
 
 	/**
 	 * 
@@ -43,9 +37,9 @@ public class EventDetails extends JDialog {
 	private JTextField txtEventName;
 
 	private JTextField txtLocation;
-	
+
 	private static JPanel buttonPane;
-	
+
 	private static CalendarController controller;
 
 	/**
@@ -68,8 +62,8 @@ public class EventDetails extends JDialog {
 		}
 
 	}
-	
-	public static void viewEventDetails(String title,Date date,Date time) {
+
+	public static void viewEventDetails(String title, Date date, Date time) {
 
 		try {
 			EventDetails dialog = new EventDetails(title, date, time);
@@ -89,19 +83,16 @@ public class EventDetails extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public EventDetails()
-	{
-		
+	public EventDetails() {
+
 	}
 
-	public EventDetails( Event evnt) {
-
-		
+	public EventDetails(Event evnt) {
 
 		this.setTitle("Event Details");
 
 		setBounds(100, 100, 406, 445);
-		
+
 		setResizable(false);
 
 		getContentPane().setLayout(new BorderLayout());
@@ -113,16 +104,14 @@ public class EventDetails extends JDialog {
 		contentPanel.setLayout(null);
 
 		display(evnt);
-		}
+	}
 
-	public EventDetails( String title,Date date,Date time) {
-
-		
+	public EventDetails(String title, Date date, Date time) {
 
 		this.setTitle("Event Details");
 
 		setBounds(100, 100, 406, 445);
-		
+
 		setResizable(false);
 
 		getContentPane().setLayout(new BorderLayout());
@@ -134,333 +123,282 @@ public class EventDetails extends JDialog {
 		contentPanel.setLayout(null);
 		try {
 			Event evnt = controller.getEventByTime(date, time, title);
-			 display(evnt);
+			display(evnt);
 		} catch (SQLException e1) {
-			
-			// To do after main frame is created 
-		//SHOW MSG WHEN NO SUCH EVENT OCUURS
-			
-//			javax.swing.JOptionPane.showMessageDialog("No Events added!!");
+
 		}
-}
+	}
 
-	public void display(Event evnt)
-		{
+	public void display(Event evnt) {
 
-			txtEventName = new JTextField();
+		txtEventName = new JTextField();
 
-			txtEventName.setBounds(122, 11, 241, 20);
+		txtEventName.setBounds(122, 11, 241, 20);
 
-			contentPanel.add(txtEventName);
+		contentPanel.add(txtEventName);
 
-			txtEventName.setColumns(10);
-			txtEventName.setText(evnt.getTitle());
-			
+		txtEventName.setColumns(10);
+		txtEventName.setText(evnt.getTitle());
 
-			txtLocation = new JTextField();
+		txtLocation = new JTextField();
 
-			txtLocation.setBounds(122, 42, 241, 20);
+		txtLocation.setBounds(122, 42, 241, 20);
 
-			contentPanel.add(txtLocation);
+		contentPanel.add(txtLocation);
 
-			txtLocation.setColumns(10);
-			txtLocation.setText(evnt.getLocation());
+		txtLocation.setColumns(10);
+		txtLocation.setText(evnt.getLocation());
 
+		JTextArea txtrEventDescription = new JTextArea();
 
-			JTextArea txtrEventDescription = new JTextArea();
+		txtrEventDescription.setBounds(122, 203, 241, 130);
 
-			txtrEventDescription.setBounds(122, 203, 241, 130);
+		JScrollPane scrollPane = new JScrollPane(txtrEventDescription);
 
-			JScrollPane scrollPane = new JScrollPane(txtrEventDescription);
+		scrollPane.setBounds(122, 203, 241, 130);
 
-			scrollPane.setBounds(122, 203, 241, 130);
+		contentPanel.add(scrollPane);
+		txtrEventDescription.setText(evnt.getDescription());
 
-			contentPanel.add(scrollPane);
-			txtrEventDescription.setText(evnt.getDescription());
+		JLabel lblEventName = new JLabel("Event Name");
 
+		lblEventName.setBounds(10, 11, 84, 20);
 
-			JLabel lblEventName = new JLabel("Event Name");
+		contentPanel.add(lblEventName);
 
-			lblEventName.setBounds(10, 11, 84, 20);
+		JLabel lblLocation = new JLabel("Location");
 
-			contentPanel.add(lblEventName);
+		lblLocation.setBounds(10, 42, 84, 20);
 
+		contentPanel.add(lblLocation);
 
+		JLabel lblStartTime = new JLabel("Start Time");
 
-			JLabel lblLocation = new JLabel("Location");
+		lblStartTime.setBounds(10, 104, 84, 20);
 
-			lblLocation.setBounds(10, 42, 84, 20);
+		contentPanel.add(lblStartTime);
 
-			contentPanel.add(lblLocation);
+		JLabel lblDescription = new JLabel("Description");
 
+		lblDescription.setBounds(10, 205, 84, 20);
 
+		contentPanel.add(lblDescription);
 
-			JLabel lblStartTime = new JLabel("Start Time");
+		JLabel lblEndTime = new JLabel("End Time");
 
-			lblStartTime.setBounds(10, 104, 84, 20);
+		lblEndTime.setBounds(10, 166, 84, 20);
 
-			contentPanel.add(lblStartTime);
+		contentPanel.add(lblEndTime);
 
+		JDateChooser startDateChooser = new JDateChooser();
 
+		startDateChooser.setBounds(122, 73, 241, 20);
 
-			JLabel lblDescription = new JLabel("Description");
+		contentPanel.add(startDateChooser);
 
-			lblDescription.setBounds(10, 205, 84, 20);
+		startDateChooser.setDate(evnt.getStartDate());
 
-			contentPanel.add(lblDescription);
+		JLabel lblStartDate = new JLabel("Start Date");
 
+		lblStartDate.setBounds(10, 73, 84, 20);
 
+		contentPanel.add(lblStartDate);
 
-			JLabel lblEndTime = new JLabel("End Time");
+		JDateChooser endDateChooser = new JDateChooser();
 
-			lblEndTime.setBounds(10, 166, 84, 20);
+		endDateChooser.setBounds(122, 135, 241, 20);
 
-			contentPanel.add(lblEndTime);
+		contentPanel.add(endDateChooser);
+		endDateChooser.setDate(evnt.getEndDate());
 
+		JLabel lblEndDate = new JLabel("End Date");
 
+		lblEndDate.setBounds(10, 135, 84, 20);
 
-			JDateChooser startDateChooser = new JDateChooser();
+		contentPanel.add(lblEndDate);
 
-			startDateChooser.setBounds(122, 73, 241, 20);
+		String[] timeInterval = { "12 AM", "01 AM", "02 AM", "03 AM", "04 AM", "05 AM", "06 AM", "07 AM", "08 AM",
 
-			contentPanel.add(startDateChooser);
+				"09 AM", "10 AM", "11 AM", "12 PM", "01 PM", "02 PM", "03 PM", "04 PM", "05 PM", "06 PM", "07 PM",
 
-			startDateChooser.setDate(evnt.getStartDate());
+				"08 PM", "09 PM", "10 PM", "11 PM" };
 
+		JComboBox cmbBoxStartTime = new JComboBox(timeInterval);
 
-			JLabel lblStartDate = new JLabel("Start Date");
+		cmbBoxStartTime.setBounds(122, 104, 241, 20);
 
-			lblStartDate.setBounds(10, 73, 84, 20);
+		contentPanel.add(cmbBoxStartTime);
 
-			contentPanel.add(lblStartDate);
+		int start = evnt.getStartTime().getHours();
+		int end = evnt.getEndTime().getHours();
 
+		JComboBox cmbBoxEndTime = new JComboBox(timeInterval);
 
+		cmbBoxEndTime.setBounds(122, 166, 241, 20);
 
-			JDateChooser endDateChooser = new JDateChooser();
+		contentPanel.add(cmbBoxEndTime);
 
-			endDateChooser.setBounds(122, 135, 241, 20);
+		cmbBoxStartTime.setSelectedIndex(start);
+		cmbBoxEndTime.setSelectedIndex(end);
 
-			contentPanel.add(endDateChooser);
-			endDateChooser.setDate(evnt.getEndDate());
+		JLabel lblWarning = new JLabel("");
 
+		lblWarning.setBounds(10, 344, 241, 20);
 
-			JLabel lblEndDate = new JLabel("End Date");
+		contentPanel.add(lblWarning);
 
-			lblEndDate.setBounds(10, 135, 84, 20);
+		buttonPane = new JPanel();
 
-			contentPanel.add(lblEndDate);
+		buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 
+		getContentPane().add(buttonPane, BorderLayout.SOUTH);
 
+		JButton okButton = new JButton("Save and close");
 
-			String[] timeInterval = { "12 AM", "01 AM", "02 AM", "03 AM", "04 AM", "05 AM", "06 AM", "07 AM", "08 AM",
+		okButton.addActionListener(new ActionListener() {
 
-					"09 AM", "10 AM", "11 AM", "12 PM", "01 PM", "02 PM", "03 PM", "04 PM", "05 PM", "06 PM", "07 PM",
+			public void actionPerformed(ActionEvent arg0) {
 
-					"08 PM", "09 PM", "10 PM", "11 PM" };
+				try {
+					CalendarController.removeEvent(evnt);
+				} catch (SQLException e) {
 
-			JComboBox cmbBoxStartTime = new JComboBox(timeInterval);
+				}
+				String eventName = "", eventLocation = "", description = "";
 
-//			Date startDate,endDate,startTime,endTime;
+				Date endDate, startDate, startTime, endTime;
 
-			cmbBoxStartTime.setBounds(122, 104, 241, 20);
+				eventName = txtEventName.getText();
 
-			contentPanel.add(cmbBoxStartTime);
-			
-			int start=evnt.getStartTime().getHours();
-			int end=evnt.getEndTime().getHours();
+				eventLocation = txtLocation.getText();
 
+				startDate = startDateChooser.getDate();
 
-			JComboBox cmbBoxEndTime = new JComboBox(timeInterval);
+				endDate = endDateChooser.getDate();
 
-			cmbBoxEndTime.setBounds(122, 166, 241, 20);
+				String startTimeString = (String) cmbBoxStartTime.getSelectedItem();
 
-			contentPanel.add(cmbBoxEndTime);
+				String endTimeString = (String) cmbBoxEndTime.getSelectedItem();
 
-			cmbBoxStartTime.setSelectedIndex(start);
-			cmbBoxEndTime.setSelectedIndex(end);
+				description = txtrEventDescription.getText();
 
-			JLabel lblWarning = new JLabel("");
+				if (eventName == null || eventName.equals("")) {
 
-			lblWarning.setBounds(10, 344, 241, 20);
+					lblWarning.setText("Event Name Cannot be Empty");
 
-			contentPanel.add(lblWarning);
+				} else if (startDate == null) {
 
+					lblWarning.setText("Start Date Cannot be Empty");
 
+				}
 
-			
+				else if (endDate != null && startDate.compareTo(endDate) > 0) {
 
-				buttonPane = new JPanel();
+					lblWarning.setText("End Date Before Start Date!!!");
 
-				buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
+				}
 
-				getContentPane().add(buttonPane, BorderLayout.SOUTH);
+				else if (endDate == null) {
 
-				
+					endDate = startDate;
 
+				}
 
+				int startTimeInt;
 
-					JButton okButton = new JButton("Save and close");
+				String val;
 
-					okButton.addActionListener(new ActionListener() {
+				if (startTimeString.equals("12 AM")) {
 
-						public void actionPerformed(ActionEvent arg0) {
-							
-							
-							try {
-								CalendarController.removeEvent(evnt);
-							} catch (SQLException e) {
-								
-							} 						
-							String eventName = "", eventLocation = "", description = "";
+					startTimeInt = 0;
 
-							Date endDate, startDate, startTime, endTime;
+				} else if (startTimeString.equals("12 PM")) {
 
+					startTimeInt = 12;
 
+				} else if (startTimeString.charAt(3) == "A".charAt(0)) {
 
-							eventName = txtEventName.getText();
+					val = startTimeString.substring(0, 2);
 
-							eventLocation = txtLocation.getText();
+					startTimeInt = Integer.parseInt(val);
 
-							startDate = startDateChooser.getDate();
+				} else {
 
-							endDate = endDateChooser.getDate();
+					val = startTimeString.substring(0, 2);
 
-							String startTimeString = (String) cmbBoxStartTime.getSelectedItem();
+					startTimeInt = Integer.parseInt(val) + 12;
 
-							String endTimeString = (String) cmbBoxEndTime.getSelectedItem();
+				}
 
-							description = txtrEventDescription.getText();
+				int endTimeInt;
 
+				String endVal;
 
+				if (endTimeString.equals("12 AM")) {
 
-							if (eventName == null || eventName.equals("")) {
+					endTimeInt = 0;
 
-								lblWarning.setText("Event Name Cannot be Empty");
+				} else if (endTimeString.equals("12 PM")) {
 
-							} else if (startDate == null) {
+					endTimeInt = 12;
 
-								lblWarning.setText("Start Date Cannot be Empty");
+				} else if (endTimeString.charAt(3) == "A".charAt(0)) {
 
-							}
+					endVal = endTimeString.substring(0, 2);
 
-							else if(endDate != null && startDate.compareTo(endDate) > 0) {
+					endTimeInt = Integer.parseInt(endVal);
 
-								lblWarning.setText("End Date Before Start Date!!!");
+				} else {
 
-							}
+					endVal = endTimeString.substring(0, 2);
 
-							else if(endDate == null) {
+					endTimeInt = Integer.parseInt(endVal) + 12;
 
-									endDate = startDate;
+				}
 
-								}
+				System.out.println(endTimeInt);
 
-								int startTimeInt;
+				startTime = new Date(startDate.getYear(), startDate.getMonth(), startDate.getDate(), startTimeInt, 0);
 
-								String val;
+				endTime = new Date(endDate.getYear(), endDate.getMonth(), endDate.getDate(), endTimeInt, 0);
 
-								if (startTimeString.equals("12 AM")) {
+				controller.addEvent(new Event(eventName, eventLocation, description, startDate,
 
-									startTimeInt = 0;
+						startTime, endDate, endTime));
 
-								} else if (startTimeString.equals("12 PM")) {
+				HomePage.refreshView();
 
-									startTimeInt = 12;
+				dispose();
 
-								} else if (startTimeString.charAt(3) == "A".charAt(0)) {
+			}
 
-									val = startTimeString.substring(0, 2);
+		});
 
-									startTimeInt = Integer.parseInt(val);
+		buttonPane.add(okButton);
 
-								} else {	
+		getRootPane().setDefaultButton(okButton);
 
-									val = startTimeString.substring(0, 2);
+		JButton cancelButton = new JButton("Delete");
 
-									startTimeInt = Integer.parseInt(val) + 12;
+		cancelButton.setActionCommand("Delete");
 
-								}
+		cancelButton.addActionListener(new ActionListener() {
 
-							
+			public void actionPerformed(ActionEvent arg0) {
 
-								int endTimeInt;
+				try {
+					controller.removeEvent(evnt);
+					HomePage.refreshView();
+					dispose();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
-								String endVal;
+			}
 
-								if (endTimeString.equals("12 AM")) {
-
-									endTimeInt = 0;
-
-								} else if (endTimeString.equals("12 PM")) {
-
-									endTimeInt = 12;
-
-								} else if (endTimeString.charAt(3) == "A".charAt(0)) {
-
-									endVal = endTimeString.substring(0, 2);
-
-									endTimeInt = Integer.parseInt(endVal);
-
-								} else {
-
-									endVal = endTimeString.substring(0, 2);
-
-									endTimeInt = Integer.parseInt(endVal) + 12;
-
-								}
-
-
-
-								System.out.println(endTimeInt);
-
-								startTime = new Date(startDate.getYear(), startDate.getMonth(), startDate.getDate(),startTimeInt, 0);
-
-								endTime = new Date(endDate.getYear(), endDate.getMonth(), endDate.getDate(), endTimeInt, 0);
-
-
-
-								controller.addEvent(new Event(eventName, eventLocation, description, startDate,
-
-										startTime, endDate, endTime));
-
-								HomePage.refreshView();
-
-								dispose();
-
-						}
-
-					});
-
-					buttonPane.add(okButton);
-
-					getRootPane().setDefaultButton(okButton);
-
-				
-
-				
-
-					JButton cancelButton = new JButton("Delete");
-
-					cancelButton.setActionCommand("Delete");
-
-					cancelButton.addActionListener(new ActionListener() {
-
-						public void actionPerformed(ActionEvent arg0) {
-							
-							try {
-								controller.removeEvent(evnt);
-								HomePage.refreshView();
-								dispose();
-							} catch (SQLException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-							
-
-						}
-
-					});
-					buttonPane.add(cancelButton);
-		}
+		});
+		buttonPane.add(cancelButton);
+	}
 
 }

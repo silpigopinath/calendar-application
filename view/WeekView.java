@@ -88,7 +88,7 @@ public class WeekView extends JFrame {
 		}
 		////////////////////////////////
 		JLabel blankDay1 = new JLabel("");
-		contentPane.add(blankDay1); //////////////// BLANC
+		contentPane.add(blankDay1); 
 
 		JLabel[] dateLabelGrid = new JLabel[7];
 		int todayFlag = -1;
@@ -107,10 +107,10 @@ public class WeekView extends JFrame {
 				Border border = BorderFactory.createMatteBorder(1, 1, 0, 1, Color.YELLOW);
 				dateLabelGrid[i].setBorder(border);
 			}
-			contentPane.add(dateLabelGrid[i]); ////////////////// DATE
+			contentPane.add(dateLabelGrid[i]); 
 		}
 
-		JLabel blankDay2 = new JLabel(""); ////////////////// BLANC
+		JLabel blankDay2 = new JLabel(""); 
 		contentPane.add(blankDay2);
 
 		for (int i = 0; i < 7; ++i) {
@@ -122,10 +122,10 @@ public class WeekView extends JFrame {
 				Border border = BorderFactory.createMatteBorder(0, 1, 1, 1, Color.YELLOW);
 				weekDay.setBorder(border);
 			}
-			contentPane.add(weekDay); ///////////// WEEKDAY
+			contentPane.add(weekDay); 
 		}
 		JLabel blankDay3 = new JLabel("");
-		contentPane.add(blankDay3); //////////////////// BLANC
+		contentPane.add(blankDay3); 
 		DefaultTableModel eventTable = null;
 		JButton[][] eventButtonGrid = new JButton[24][7];
 		try {
@@ -148,14 +148,10 @@ public class WeekView extends JFrame {
 				viewAllEventsButtonGrid[i] = new JButton("View All");
 				viewAllEventsButtonGrid[i].addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						// System.out.println("event");
 						for (int row = 0; row < 7; row++) {
 							if (viewAllEventsButtonGrid[row] == e.getSource()) {
 
 								int date = Integer.parseInt(dateLabelGrid[row].getText());
-								System.out.println("year : " + (year));
-								System.out.println("month : " + (month));
-								System.out.println("Row" + row);
 								try {
 									if (date - row < 1 && calendar.get(Calendar.DATE) > 20) {
 										List<Event> eventList = CalendarController
@@ -167,21 +163,19 @@ public class WeekView extends JFrame {
 										EventList.getEventList(eventList);
 									}
 								} catch (Exception e1) {
-									// TODO Auto-generated catch block
 									// e1.printStackTrace();
 								}
-								// ///// (DATE) LIST<EVENT> <DIALOG>
-								// System.out.println(row);
+							
 							}
 
 						}
 
 					}
 				});
-				contentPane.add(viewAllEventsButtonGrid[i]); ////////// VIEWALLEVENTS
+				contentPane.add(viewAllEventsButtonGrid[i]); 
 			} else {
 				JLabel blankDay = new JLabel("");
-				contentPane.add(blankDay); ////////////////////////////////// BLANC
+				contentPane.add(blankDay);
 			}
 
 		}
@@ -214,7 +208,6 @@ public class WeekView extends JFrame {
 					}
 					Date currentTime = new Date(currentDayDate.getYear(), currentDayDate.getMonth(),
 							currentDayDate.getDate(), startTimeInt, 0);
-					// ////////////// (DATE, TIME) LIST<EVENT>
 					int eventCount = 0;
 					String eventTitle = null;
 					Event event = null;
@@ -227,8 +220,6 @@ public class WeekView extends JFrame {
 
 							if (startHour <= currentHour && endHour > currentHour) {
 								eventCount++;
-								// System.out.println(startHour + " " + endHour +" " + currentHour + " : " +
-								// event.getTitle());
 								eventTitle = event.getTitle();
 							}
 						}
@@ -240,10 +231,7 @@ public class WeekView extends JFrame {
 						contentPane.add(blankDay);
 					} else if (eventCount >= 1) {
 						if (eventCount == 1) {
-							// System.out.println("setTitle");
-							// String eventTitle = event.getTitle();
 							eventButtonGrid[i][j - 1] = new JButton(eventTitle);
-							// System.out.println(eventTitle);
 						} else {
 							eventButtonGrid[i][j - 1] = new JButton("...");
 						}
@@ -252,37 +240,31 @@ public class WeekView extends JFrame {
 								for (int row = 0; row < 24; row++) {
 									for (int col = 0; col < 7; col++) {
 										if (eventButtonGrid[row][col] == e.getSource()) {
-											///// (DATE, TIME, TITLE) EVENT <DIALOG>
 											int date = Integer.parseInt(dateLabelGrid[col].getText());
-											// System.out.println("Row : " + row + "Date = " + date);
 											if ("...".equals(eventButtonGrid[row][col].getText())) {
 												try {
 													List<Event> eventList = CalendarController.readByDateTime(
 															new Date(year - 1900, month, date),
 															new Date(year - 1900, month, date, row, 0));
-													System.out.println("Row : " + row + "Date = " + date);
 													EventList.getEventList(eventList);
 												} catch (Exception e1) {
-													// TODO Auto-generated catch block
 													// e1.printStackTrace();
 												}
 											} else {
 												try {
 													List<Event> eventList = CalendarController.getEvent(
 															eventButtonGrid[row][col].getText(),
-															new Date(year - 1900, month, date)); //// TITLE,DATE,TIME
+															new Date(year - 1900, month, date)); 
 													if (eventList.size() == 1) {
 														EventDetails.viewEventDetails(eventList.get(0));
 													} else {
 														EventList.getEventList(eventList);
 													}
 												} catch (Exception e1) {
-													// TODO Auto-generated catch block
 													// e1.printStackTrace();
 												}
 											}
 
-											// System.out.println(row + "" + col);
 										}
 									}
 								}

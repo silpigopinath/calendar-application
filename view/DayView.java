@@ -1,8 +1,6 @@
 package view;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.EventQueue;
 
 import javax.swing.BorderFactory;
@@ -21,7 +19,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.awt.GridBagLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -99,7 +96,6 @@ public class DayView extends JFrame {
 		try {
 			eventList = CalendarController.readDay(calendar.getTime());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			if (e.getMessage().equals("No Events for the Day")) {
 				// KEEP QUIET
 			}
@@ -113,7 +109,6 @@ public class DayView extends JFrame {
 							List<Event> eventList = CalendarController.readDay(calendar.getTime());
 							EventList.getEventList(eventList);
 						} catch (Exception e1) {
-							// TODO Auto-generated catch block
 							// e1.printStackTrace();
 						}
 					}
@@ -169,7 +164,7 @@ public class DayView extends JFrame {
 				}
 			}
 
-			if (i % 2 == 0) { //////////////// TIME
+			if (i % 2 == 0) {
 				JLabel timeLabel = new JLabel(timeInterval[i / 2]);
 				Border Timeborder = BorderFactory.createMatteBorder(1, 1, 0, 1, Color.DARK_GRAY);
 				timeLabel.setBorder(Timeborder);
@@ -185,7 +180,6 @@ public class DayView extends JFrame {
 						for (int row = 0; row < 24; row++) {
 
 							if (eventButtonGrid[row] != null && e.getSource() == eventButtonGrid[row]) {
-								//////////////////// (DATE) LIST<EVENT> <DIALOG>
 								int hour = row;
 								Date time = new Date(calendar.get(calendar.YEAR), calendar.get(calendar.MONTH),
 										calendar.get(calendar.DATE), hour, 0);
@@ -195,22 +189,18 @@ public class DayView extends JFrame {
 												time);
 										EventList.getEventList(eventList);
 									} catch (Exception e1) {
-										// TODO Auto-generated catch block
 										// e1.printStackTrace();
 									}
 								} else {
 									try {
 										Event event = CalendarController.getEventByTime(calendar.getTime(), time,
-												eventButtonGrid[row].getText()); //// TITLE,DATE,TIME
+												eventButtonGrid[row].getText()); 
 
 										EventDetails.viewEventDetails(event);
 									} catch (Exception e1) {
-										// TODO Auto-generated catch block
 										// e1.printStackTrace();
 									}
 								}
-								System.out.println(eventButtonGrid[row]);
-								System.out.println(row + "" + row);
 
 							}
 

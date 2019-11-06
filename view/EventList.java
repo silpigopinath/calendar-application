@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.BorderLayout;
-import java.util.Date;
 import java.util.List;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -10,7 +9,6 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import controller.CalendarController;
 import model.Event;
 
 import javax.swing.JScrollPane;
@@ -31,6 +29,7 @@ public class EventList extends JDialog {
 	public static void getEventList(List<Event> ls) {
 		try {
 			EventList dialog = new EventList(ls);
+			dialog.setTitle("Events List");
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -48,7 +47,7 @@ public class EventList extends JDialog {
 	
 	public EventList(List<Event> ls) {
 		
-		setBounds(100, 100, 450, 401);
+		setBounds(100, 100, 430, 390);
 		setResizable(false);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
