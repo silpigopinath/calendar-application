@@ -586,8 +586,4 @@ public class EventDAO {
 	}
 
 
-	public static void main(String args[]) {
-
-	}
-
 }
