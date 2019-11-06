@@ -45,7 +45,8 @@ public class EventDetails extends JDialog {
 	private JTextField txtLocation;
 	
 	private static JPanel buttonPane;
-  private static CalendarController controller;
+	
+	private static CalendarController controller;
 
 	/**
 	 * Launch the application.
@@ -100,6 +101,8 @@ public class EventDetails extends JDialog {
 		this.setTitle("Event Details");
 
 		setBounds(100, 100, 406, 445);
+		
+		setResizable(false);
 
 		getContentPane().setLayout(new BorderLayout());
 
@@ -112,7 +115,6 @@ public class EventDetails extends JDialog {
 		display(evnt);
 		}
 
-	
 	public EventDetails( String title,Date date,Date time) {
 
 		
@@ -120,6 +122,8 @@ public class EventDetails extends JDialog {
 		this.setTitle("Event Details");
 
 		setBounds(100, 100, 406, 445);
+		
+		setResizable(false);
 
 		getContentPane().setLayout(new BorderLayout());
 
@@ -325,7 +329,7 @@ public class EventDetails extends JDialog {
 
 							String endTimeString = (String) cmbBoxEndTime.getSelectedItem();
 
-							description = lblDescription.getText();
+							description = txtrEventDescription.getText();
 
 
 
@@ -419,7 +423,7 @@ public class EventDetails extends JDialog {
 
 										startTime, endDate, endTime));
 
-								
+								HomePage.refreshView();
 
 								dispose();
 
@@ -445,6 +449,7 @@ public class EventDetails extends JDialog {
 							
 							try {
 								controller.removeEvent(evnt);
+								HomePage.refreshView();
 								dispose();
 							} catch (SQLException e) {
 								// TODO Auto-generated catch block

@@ -48,6 +48,7 @@ public class AddEvent extends JDialog {
 
 		this.setTitle("Add Event");
 		setBounds(100, 100, 406, 445);
+		setResizable(false);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -188,6 +189,8 @@ public class AddEvent extends JDialog {
 
 							CalendarController.addEvent(new Event(eventName, eventLocation, description, startDate,
 									startTime, endDate, endTime));
+							
+							HomePage.refreshView();
 							
 							dispose();
 						}

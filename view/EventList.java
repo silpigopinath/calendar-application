@@ -49,6 +49,7 @@ public class EventList extends JDialog {
 	public EventList(List<Event> ls) {
 		
 		setBounds(100, 100, 450, 401);
+		setResizable(false);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
