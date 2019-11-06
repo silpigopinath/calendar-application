@@ -40,10 +40,7 @@ public class EventList extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public EventList() {
-		getContentPane().setLayout(null);
-		
-	}
+
 	
 	public EventList(List<Event> ls) {
 		

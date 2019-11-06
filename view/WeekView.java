@@ -34,20 +34,7 @@ public class WeekView extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					GregorianCalendar cal = new GregorianCalendar();
-					cal.set(Calendar.DATE, 2);
-					WeekView frame = new WeekView(cal);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+
 
 	/**
 	 * Create the frame.

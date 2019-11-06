@@ -29,21 +29,7 @@ public class DayView extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					GregorianCalendar calendar = new GregorianCalendar();
-					calendar.set(Calendar.DATE, 1);
-					DayView frame = new DayView(calendar);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					// e.printStackTrace();
-					throw e;
-				}
-			}
-		});
-	}
+	
 
 	/**
 	 * Create the frame.

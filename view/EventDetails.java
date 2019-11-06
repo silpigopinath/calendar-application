@@ -63,22 +63,7 @@ public class EventDetails extends JDialog {
 
 	}
 
-	public static void viewEventDetails(String title, Date date, Date time) {
 
-		try {
-			EventDetails dialog = new EventDetails(title, date, time);
-
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-
-			dialog.setVisible(true);
-
-		} catch (Exception e) {
-
-			throw e;
-
-		}
-
-	}
 
 	/**
 	 * Create the dialog.
@@ -104,29 +89,6 @@ public class EventDetails extends JDialog {
 		contentPanel.setLayout(null);
 
 		display(evnt);
-	}
-
-	public EventDetails(String title, Date date, Date time) {
-
-		this.setTitle("Event Details");
-
-		setBounds(100, 100, 406, 445);
-
-		setResizable(false);
-
-		getContentPane().setLayout(new BorderLayout());
-
-		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-
-		getContentPane().add(contentPanel, BorderLayout.CENTER);
-
-		contentPanel.setLayout(null);
-		try {
-			Event evnt = controller.getEventByTime(date, time, title);
-			display(evnt);
-		} catch (SQLException e1) {
-
-		}
 	}
 
 	public void display(Event evnt) {

@@ -101,8 +101,4 @@ public class DatePanel extends JPanel {
 		
 	}
 
-	public static DatePanel getDatePanel(String date, String event1, String event2, String event3) {
-		return new DatePanel(date, event1, event2, event3);
-	}
-
 }
