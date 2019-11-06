@@ -29,21 +29,13 @@ public class EventList extends JDialog {
 	 * Launch the application.
 	 */
 	public static void getEventList(List<Event> ls) {
-
 		try {
-
 			EventList dialog = new EventList(ls);
-
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-
 			dialog.setVisible(true);
-
 		} catch (Exception e) {
-
 			throw e;
-
 		}
-
 	}
 
 	/**
@@ -53,6 +45,7 @@ public class EventList extends JDialog {
 		getContentPane().setLayout(null);
 		
 	}
+	
 	public EventList(List<Event> ls) {
 		
 		setBounds(100, 100, 450, 401);
@@ -67,7 +60,6 @@ public class EventList extends JDialog {
 			try {
 				if(ls!=null)
 				{
-				
 			    DefaultMutableTreeNode event=new DefaultMutableTreeNode("Events");
 			   
 			    
@@ -117,14 +109,11 @@ public class EventList extends JDialog {
 				        	int index=root.getIndex(parent);
 				        	System.out.println(ls.get(index).getTitle());			        	
 				        	new EventDetails(ls.get(index)).setVisible(true);
-				        	dispose();
 				        	}
 				        else if(!node.isRoot())
 				        {
 				        	int index=root.getIndex(node);
-				        	
 				        	new EventDetails(ls.get(index)).setVisible(true);
-				        	dispose();
 				        }
 				        
 				        

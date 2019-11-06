@@ -48,83 +48,45 @@ public class EventDetails extends JDialog {
   private static CalendarController controller;
 
 	/**
-
 	 * Launch the application.
-
 	 */
 
-  public static void viewEventDetails(Event event) {
-
-
+	public static void viewEventDetails(Event event) {
 
 		try {
-
 			EventDetails dialog = new EventDetails(event);
 
-
-
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-
-
 
 			dialog.setVisible(true);
 
-
-
 		} catch (Exception e) {
-
-
 
 			throw e;
 
-
-
 		}
 
-
-
 	}
-
 	
-
 	public static void viewEventDetails(String title,Date date,Date time) {
 
-
-
 		try {
-
 			EventDetails dialog = new EventDetails(title, date, time);
-
-
 
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
-
-
 			dialog.setVisible(true);
-
-
 
 		} catch (Exception e) {
 
-
-
 			throw e;
-
-
 
 		}
 
-
-
 	}
 
-
-
 	/**
-
 	 * Create the dialog.
-
 	 */
 	public EventDetails()
 	{
@@ -151,7 +113,7 @@ public class EventDetails extends JDialog {
 		}
 
 	
-public EventDetails( String title,Date date,Date time) {
+	public EventDetails( String title,Date date,Date time) {
 
 		
 
@@ -178,11 +140,7 @@ public EventDetails( String title,Date date,Date time) {
 		}
 }
 
-			
-
-		
-
-		public void display(Event evnt)
+	public void display(Event evnt)
 		{
 
 			txtEventName = new JTextField();
@@ -345,9 +303,9 @@ public EventDetails( String title,Date date,Date time) {
 							
 							
 							try {
-								controller.removeEvent(evnt.getStartDate(),evnt.getStartTime(),evnt.getTitle());
-							} catch (Exception e) {
-								e.printStackTrace();
+								CalendarController.removeEvent(evnt);
+							} catch (SQLException e) {
+								
 							} 						
 							String eventName = "", eventLocation = "", description = "";
 
@@ -476,7 +434,7 @@ public EventDetails( String title,Date date,Date time) {
 				
 
 				
-					{
+
 					JButton cancelButton = new JButton("Delete");
 
 					cancelButton.setActionCommand("Delete");
@@ -486,10 +444,9 @@ public EventDetails( String title,Date date,Date time) {
 						public void actionPerformed(ActionEvent arg0) {
 							
 							try {
-								System.out.println(evnt.getTitle());
-								CalendarController.removeEvent(evnt.getStartDate(),evnt.getStartTime(),evnt.getTitle());
+								controller.removeEvent(evnt);
 								dispose();
-							} catch (Exception e) {
+							} catch (SQLException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
@@ -499,12 +456,6 @@ public EventDetails( String title,Date date,Date time) {
 
 					});
 					buttonPane.add(cancelButton);
-					}
 		}
+
 }
-
-				
-
-			
-		
-
