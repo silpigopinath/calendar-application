@@ -584,83 +584,9 @@ public class EventDAO {
 		
 		
 	}
-	
 
-	
-//REMOVE EVENT
 
 	public static void main(String args[]) {
-
-		List<Event> eventList = null;
-		try {
-			eventList = readByDateTime(new Date(2019 - 1900, 10, 20), new java.util.Date(2019 - 1900, 10, 20, 4, 0));
-			
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		System.out.println(eventList.size());
-//		System.out.println("Row : " + row + "Date = " + date);
-//		System.out.println(date + " " + month + " ");
-		
-		
-//		System.out.println(evList.getRowCount());
-//		for(int i = 0; i<evList.getRowCount(); ++i) {
-//			int x = (int)evList.getValueAt(i, 0);
-//			System.out.print(evList.getValueAt(i, 0));
-//			System.out.print(x);
-//			Event e = (Event)evList.getValueAt(i, 1);
-//			System.out.println("   " + e.getTitle());
-//		}
-
-//		try {
-//
-//
-//
-//			// DbConnector.getInstance();
-//
-////			create();
-//
-////			/cal.set(2019,9,13,10,30);
-//
-//			 Time start = Time.valueOf("4:00:00");
-//
-//			 long l = start.getTime();
-////
-//			 Time end=Time.valueOf("5:00:00");
-//			 long l1 = end.getTime();
-////			 insert(new Event("Seminar","Conference Hall","Seminar on the topic women em-Powerment ",new Date(2019-1900,11,11),new Date(l),new Date(2019-1900,11,15),new Date(l1)));
-//			 removeEvent(new Event("Seminar","Conference Hall","Seminar on the topic women em-Powerment ",new Date(2019-1900,11,11),new Date(l),new Date(2019-1900,11,15),new Date(l1)));
-//			// System.out.println(cal);
-//
-//			// cal.set(Calendar.DAY_OF_MONTH, 13);
-////
-//			Date d=new Date(2019-1900,11,14);
-//
-////			List<Event> ls=
-////			Event evnt=getEventByTime(d,new Date(l),"Seminar");
-////			System.out.println("LOC"+evnt.getLocation()+"DES"+evnt.getDescription());
-////		    for(int i=0;i<ls.size();i++)
-////
-////			 {
-////
-////			System.out.println(ls.get(i).getStartDate()+" "+ls.get(i).getStartTime()+" "+ls.get(i).getTitle());
-////
-////			 }
-//
-//			// System.out.println("No results found");
-//
-//			// Calendar cal=Calendar.getInstance();
-//
-//			// System.out.println(cal.get(Calendar.WEEK_OF_YEAR));
-//
-//		} catch (Exception e) {
-//
-//			// TODO Auto-generated catch block
-//
-//			e.printStackTrace();
-//
-//		}
 
 	}
 
